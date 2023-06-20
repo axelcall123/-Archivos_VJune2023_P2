@@ -1,25 +1,37 @@
-import Analizador.ply.lex as lex
-import Analizador.ply.yacc as yacc
+import ply.lex as lex
+import ply.yacc as yacc
 import re
 
 
 #LEXICO
-reserved = {
-    'create':'CREATE',
-    'delete':'DELETE',
-    'copy':'COPY',
-    'transfer':'TRANSFER',
-    'rename':'RENAME',
-    'modify':'MODIFY',
-    'backup':'BACKUP',
-    'recovery':'RECOVERY',
-    'delete_all':'DELETE_ALL',
-    'open':'OPEN',
-    'server':'SERVER',
-    'bucket':'BUCKET'
-    
-}
+# reserved = {
+#     'backup': 'BACKUP',
+#     'bucket': 'BUCKET',
+#     'copy':'COPY',
+#     'create':'CREATE',
+#     'delete':'DELETE',
+#     'delete_all':'DELETE_ALL',
+#     'modify':'MODIFY',
+#     'open':'OPEN',
+#     'recovery':'RECOVERY',
+#     'rename': 'RENAME',
+#     'server':'SERVER',
+#     'transfer': 'TRANSFER'
+# }
 tokens = [
+    'BACKUP',
+    'BUCKET',
+    'COPY',
+    'CREATE',
+    'DELETE',
+    'DELETE_ALL',
+    'MODIFY',
+    'OPEN',
+    'RECOVERY',
+    'RENAME',
+    'SERVER',
+    'TRANSFER',
+
     'NAME',
     'BODY',
     'PATH',
@@ -38,7 +50,20 @@ tokens = [
     'APORT',
     'STRING'
 
-] + list(reserved.values())
+]# + list(reserved.values())
+t_BACKUP = r'backup'
+t_BUCKET = r'bucket'
+t_COPY = r'copy'
+t_CREATE = r'create'
+t_DELETE = r'delete'
+t_DELETE_ALL = r'delete_all'
+t_MODIFY = r'modify'
+t_OPEN = r'open'
+t_RECOVERY = r'recovery'
+t_RENAME = r'rename'
+t_SERVER = r'server'
+t_TRANSFER = r'transfer'
+
 
 t_NAME = r'-name->'
 t_BODY = r'-body->'
@@ -67,7 +92,7 @@ def t_AIP(t):
     return t
 
 def t_WORD(t):
-    r'\w+'
+    r'[a-zA-Z][a-zA-Z0-9_]*]'
     t.value = t.value.lower()
     return t
 
@@ -78,7 +103,7 @@ def t_APORT(t):
     return t
 
 def t_STRING(t):
-    r'\"(\w|\s)+\"'
+    r'^\"[^"]+\"$'
     t.value = t.value.lower()
     return t
 
@@ -128,8 +153,7 @@ def p_comandos(p):
 
 
 def p_main_comando(p):
-    '''maincomando : CONFIGURE 
-                | CREATE
+    '''maincomando : CREATE
                 | DELETE
                 | COPY
                 | TRANSFER
@@ -160,7 +184,7 @@ def p_subcomando(p):
 def p_sub(p):
     '''sub : TYPE tipo
             | NAME nombre
-            | BODY string
+            | BODY STRING
             | PATH RUTA
             | FROM RUTA
             | TO RUTA
@@ -191,14 +215,16 @@ def p_nombre(p):
 def p_error(p):
     if p:
         print(f"Error sintactico en el token '{p.value}', {p.lexer.lineno}")
-        print(type(p))
     else:
         print("Error sintactico EOF")
 
 
 def gramarMain():
     parser = yacc.yacc()
-    f = open("Analizador/entradas.txt", "r")
+    f = open("./Analizador/entradas.txt", "r")
     input = f.read()
     resultado = parser.parse(input.lower())
     return resultado
+
+
+gramarMain()
