@@ -8,6 +8,7 @@ from Comandos.modify import Modify
 from Comandos.backup import Backup
 from Comandos.recovery import Recovery
 from Comandos.deleteAll import DeleteAll
+from Comandos.open import Open
 
 
 class Leer:
@@ -181,8 +182,6 @@ class Leer:
                                 comandoRecovery.recoveryBuckettoServer()
                             #else:
                             #    comandoAgregar.agregarCloud()
-
-
                 if (comando == "delete_all"):  # !Comando exec
                     #self.local=False
                     comandoBorrarTodo = DeleteAll()
@@ -195,4 +194,23 @@ class Leer:
                                 comandoBorrarTodo.borrarBucket()
                             #else:
                             #    comandoBorrarTodo.borrarServer()
+                if (comando == "open"):  # !Comando Open
+                    #self.local=False
+                    comandoOpen= Open()
+                    for parametros in element:
+                        if (parametros != "open"):
+                            for elementos2 in parametros:
+                                if (elementos2[0] == "-type->"):
+                                    comandoOpen.type(elementos2[1])
+                                elif(elementos2[0] == "-ip->"):
+                                    comandoOpen.Ip(elementos2[1])
+                                elif(elementos2[0] == "-port->"):
+                                    comandoOpen.Port(elementos2[1])
+                                else:
+                                    comandoOpen.Name(elementos2[1])
+                            #! Dependiento del configure
+                            if (comandoOpen.tipo == "bucket")&(comandoOpen.ip==comandoOpen.port): #Open bucket  propio
+                                comandoOpen.openBucket()
+                            #else:
+                            #    comandoBackup.backupBuckettoBucket()
                       

@@ -1,17 +1,12 @@
-
-class Backup:
+class Open:
     def __init__ (self):
-        self.tipoA=""
-        self.tipoDe=""
+        self.tipo=""
         self.ip=""
         self.port=""
         self.name=""
 
-    def typeTo(self,tipoDe):
-        self.tipoDe=tipoDe
-
-    def typeFrom(self,tipoA):
-        self.tipoA=tipoA
+    def type(self,tipo):
+        self.tipo=tipo
 
     def Ip(self,ip):
         self.ip=ip
@@ -22,10 +17,9 @@ class Backup:
     def Name(self,name):
         self.name=name
 
-    def backupBuckettoServer(self):
-        print("BackupB2B")
-        print(self.tipoA)
-        print(self.tipoDe)
+    def openBucket(self):
+        print("openBucket")
+        print(self.tipo)
         print(self.ip)
         print(self.port)
         print(self.name)
