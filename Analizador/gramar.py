@@ -47,7 +47,7 @@ tokens = [
     'ARCHIVO',
     'RUTA',
     'AIP',
-    'WORD',
+    # 'WORD',
     'APORT',
     'STRING'
 
@@ -92,10 +92,10 @@ def t_AIP(t):
     t.value = t.value.lower()
     return t
 
-def t_WORD(t):
-    r'[a-zA-Z][a-zA-Z0-9_]*]'
-    t.value = t.value.lower()
-    return t
+# def t_WORD(t):
+#     r'[a-zA-Z][a-zA-Z0-9_]*]'
+#     t.value = t.value.lower()
+#     return t
 
 
 def t_APORT(t):
@@ -209,7 +209,7 @@ def p_tipo(p):
 def p_nombre(p):
     '''nombre : ARCHIVO
                 | STRING
-                | WORD
+
                 | RUTA
     '''
     p[0] = p[1]

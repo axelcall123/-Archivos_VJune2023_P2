@@ -1,0 +1,5 @@
+cd proyecto2023v1
+
+sudo apt install git
+https://www.youtube.com/watch?v=kHkQnuYzwoo
+https://collabnix.com/how-to-fix-support-for-password-authentication-was-removed-error-in-github/#:~:text=This%20means%20that%20if%20you,PAT)%20or%20an%20SSH%20URL.
