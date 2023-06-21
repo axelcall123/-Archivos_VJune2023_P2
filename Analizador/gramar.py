@@ -1,6 +1,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import re
+from Comandos.esencial import Leer
 
 
 #LEXICO
@@ -103,7 +104,8 @@ def t_APORT(t):
     return t
 
 def t_STRING(t):
-    r'^\"[^"]+\"$'
+    #anterior  ^\"[^"]+\"$
+    r'"[^"]+\"'
     t.value = t.value.lower()
     return t
 
@@ -134,7 +136,7 @@ def p_lexico(p):
         p[0] = p[1]
         p[0].append(p[2])
     else:
-        p[0] = p[1]
+        p[0] = [p[1]]
 
 
 def p_comandos(p):
@@ -221,10 +223,12 @@ def p_error(p):
 
 def gramarMain():
     parser = yacc.yacc()
-    f = open("./Analizador/entradas.txt", "r")
+    f = open("entradas.txt", "r")
     input = f.read()
     resultado = parser.parse(input.lower())
+    #print(resultado)
     return resultado
 
-
-gramarMain()
+analizar= Leer()
+analizar.comando(gramarMain())
+#gramarMain()

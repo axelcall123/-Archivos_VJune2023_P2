@@ -1,1 +1,1 @@
-open -type->server -name->archivo1.txt
+Delete_all -type->bucket
