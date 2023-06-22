@@ -1,14 +1,14 @@
 
-from Comandos.create import Create
-from Comandos.delete import Delete
-from Comandos.copy import Copy
-from Comandos.transfer import Transfer
-from Comandos.rename import Rename
-from Comandos.modify import Modify
-from Comandos.backup import Backup
-from Comandos.recovery import Recovery
-from Comandos.deleteAll import DeleteAll
-from Comandos.open import Open
+from Analizador.Comandos.create import Create
+from Analizador.Comandos.delete import Delete
+from Analizador.Comandos.copy import Copy
+from Analizador.Comandos.transfer import Transfer
+from Analizador.Comandos.rename import Rename
+from Analizador.Comandos.modify import Modify
+from Analizador.Comandos.backup import Backup
+from Analizador.Comandos.recovery import Recovery
+from Analizador.Comandos.deleteAll import DeleteAll
+from Analizador.Comandos.open import Open
 
 
 class Leer:

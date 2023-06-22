@@ -1,7 +1,7 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import re
-from Comandos.esencial import Leer
+from Analizador.Comandos.esencial import Leer
 
 
 #LEXICO
@@ -223,7 +223,7 @@ def p_error(p):
 
 def gramarMain():
     parser = yacc.yacc()
-    f = open("entradas.txt", "r")
+    f = open("Analizador/entradas.txt", "r")
     input = f.read()
     resultado = parser.parse(input.lower())
     #print(resultado)

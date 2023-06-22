@@ -74,6 +74,6 @@ class App:
 
 
 
-# root = tk.Tk()
-# app = App(root)
-# root.mainloop()
+root = tk.Tk()
+app = App(root)
+root.mainloop()

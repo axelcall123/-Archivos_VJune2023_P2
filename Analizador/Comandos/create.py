@@ -2,6 +2,7 @@ import os
 import sys
 import tempfile
 #from Aplicacion.variablesGlobales import temporalFile
+import boto3
 class Create:
     def __init__ (self,):
         self.nombre=""
@@ -36,7 +37,10 @@ class Create:
         self.tipo=tipo
 
     def creacionBucket(self):
-        print(self.nombre)
-        print(self.contenido)
-        print(self.ruta)
-        print(self.tipo)
+        #limpiando path
+        self.ruta=self.ruta.replace('/',  '', 1)
+        #Creando archivo o carpeta o ambos
+        s3 = boto3.resource('s3')
+        print("conectado al buked")
+        s3.Object("202001574", self.ruta+self.nombre).put(Body=self.contenido)
+        print("Archivo creado al bucket")
