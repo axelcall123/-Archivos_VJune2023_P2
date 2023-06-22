@@ -66,6 +66,12 @@ class App:
 
     def GCheckBox_722_command(self):
         print("command1")
+        res = requests.request(
+            method='PUT',  # PUEDE EXISTAR MAS DE UN METDO EN LA MISMA URL
+            url="http://192.168.0.29:1000/uploadS",  # URL METODO
+            json={"url": "D:/AXEL/DESCARGAS/p2.jpg", "key": "p2.jpg"}  # LO QUE ENVIO
+        )
+        print("tkitner>\n\tcomando:\n", json.loads(res.text))
 
     def GCheckBox_306_command(self):
         print("command2")

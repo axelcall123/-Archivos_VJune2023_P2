@@ -1,4 +1,4 @@
-from flask import Flask,jsonify,request
+from flask import Flask,jsonify,request,Response
 import boto3
 from key import *
 app = Flask(__name__)
@@ -14,9 +14,11 @@ def index():
   
 #LISTADO DEL BUCKET
 
-@app.route('/uploadS', methods=['GET','POST'])#se necesita get, post al mismo tiempo
+@app.route('/uploadS', methods=['GET','PUT'])#se necesita get, post al mismo tiempo
 def upload_file():
-   return 'No file provided.'
+   rs = request.get_json()
+   s3.put_object(Body=open(rs["url"], 'rb'), Bucket=name, Key=rs["key"])
+   return jsonify({'status': 'subido'})
 
 @app.route('/listado', methods=['GET'])#listado
 def listado():
@@ -53,7 +55,9 @@ def rP():
         "hola":"meme"
     }
     '''
+    resp=Response('',500)
     rs=request.get_json()
+    print(resp)
     print(f'server<\n {rs}')
     # #print(rs["txt"],rs["hola"])
     return jsonify({'tf': 'bien', 'envio':rs})
