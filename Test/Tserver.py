@@ -1,6 +1,6 @@
 from flask import Flask,jsonify,request,Response
 import boto3
-from key import *
+from ...key import *
 import json
 app = Flask(__name__)
 
