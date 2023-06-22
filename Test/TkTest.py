@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.font as tkFont
-
+import requests
+import json
 class App:
     def __init__(self, root):
         #setting title
@@ -64,13 +65,29 @@ class App:
         GButton_400["command"] = self.GButton_400_command
 
     def GCheckBox_722_command(self):
-        print("command")
+        print("command1")
 
     def GCheckBox_306_command(self):
-        print("command")
+        print("command2")
 
     def GButton_400_command(self):
-        print("command")
+        #click me
+        #metodo postman
+        #rsp = requests.get("http://192.168.0.29:1000/get_data?url=123456&saludo=abc")
+        #print(f"commando res:{rsp.content}")
+        res = requests.request(
+            method="GET",#PUEDE EXISTAR MAS DE UN METDO EN LA MISMA URL
+            url="http://192.168.0.29:1000/get_data",#URL METODO
+            json={"txt": "text","hola": "meme"}#LO QUE ENVIO
+        )
+        print("tkitner>",json.loads(res.text))
+        res = requests.get(
+            url="http://192.168.0.29:1000/get_data",  # URL METODO
+            json={"nel": "miS", "hola": "memeS"}  # LO QUE ENVIO
+        )
+        print("tkitner>", json.loads(res.text))
+
+        
 
 
 

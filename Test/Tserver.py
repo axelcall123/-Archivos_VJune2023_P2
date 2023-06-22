@@ -1,4 +1,4 @@
-from flask import Flask,jsonify, request
+from flask import Flask,jsonify,request
 import boto3
 from key import *
 app = Flask(__name__)
@@ -37,9 +37,27 @@ def listado():
 
 @app.route('/get_data', methods=['GET'])
 def rP():
-    url = request.args.get('url')
+    #metodo postaman url mas largo
+    # url = request.args.get('url')
+    #saludo = request.args.get('saludo')
     #postman:>http://192.168.0.29:1000/get_data?url=123456
-    return f'No file provided. {url}'
+    #postman:>http://192.168.0.29:1000/get_data?url=123456&saludo=abc
+    #return f'No file provided. {url} , {saludo}'
+
+
+    #https://stackoverflow.com/questions/10434599/get-the-data-received-in-a-flask-request
+    #http://192.168.0.29:1000/get_data
+    '''envio json
+    {
+        "txt":"text",
+        "hola":"meme"
+    }
+    '''
+    rs=request.get_json()
+    print(f'server<\n {rs}')
+    # #print(rs["txt"],rs["hola"])
+    return jsonify({'tf': 'bien', 'envio':rs})
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=1000,debug=True)
