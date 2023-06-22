@@ -3,6 +3,7 @@ import boto3
 from Analizador.Comandos.create import Create
 from Analizador.Comandos.delete import Delete
 from Analizador.Comandos.copy import Copy
+from Analizador.Comandos.transfer import Transfer
 
 
     
@@ -46,6 +47,15 @@ def copy():
         copy.a=request.json['to']
         copy.copiarBucketToBucket()
     return {"copy":"Archivo-Bucket-Bucket"}
+
+@app.route('/transfer',methods = ['POST'])
+def trasfer():
+    trasfer=Transfer()
+    if(request.json['type_from']=="bucket")and(request.json['type_to']=="bucket"):
+        trasfer.de=request.json['from']
+        trasfer.a=request.json['to']
+        trasfer.trasferirBucketToBucket()
+    return {"trasfer":"Archivo-Bucket-Bucket"}
 
 
 
