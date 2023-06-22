@@ -68,6 +68,7 @@ def recursivamente(ruta,aJson):
     for aA in aJson:  # NORMAL
         if '.' in   aA:#txt
             print(ruta,'>>',aA,'<>',aJson[aA])
+            #hacer algo con la ruta
         else:#folder
             recursivamente(f'{ruta}/{aA}',aJson[aA])
 
