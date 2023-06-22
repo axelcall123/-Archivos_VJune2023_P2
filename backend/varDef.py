@@ -1,0 +1,1 @@
+rutaEspecifica='./backend/archivos'
