@@ -35,6 +35,11 @@ def listado():
     return jsonify({'files': files, 'folders': folders})
 
 
+@app.route('/get_data', methods=['GET'])
+def rP():
+    url = request.args.get('url')
+    #postman:>http://192.168.0.29:1000/get_data?url=123456
+    return f'No file provided. {url}'
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=1000,debug=True)
