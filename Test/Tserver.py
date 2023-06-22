@@ -1,6 +1,7 @@
 from flask import Flask,jsonify,request,Response
 import boto3
 from key import *
+import json
 app = Flask(__name__)
 
 s3 = boto3.client(
@@ -14,7 +15,7 @@ def index():
   
 #LISTADO DEL BUCKET
 
-@app.route('/uploadS', methods=['GET','PUT'])#se necesita get, post al mismo tiempo
+@app.route('/uploadS', methods=['PUT'])#se necesita get, post al mismo tiempo
 def upload_file():
    rs = request.get_json()
    s3.put_object(Body=open(rs["url"], 'rb'), Bucket=name, Key=rs["key"])
@@ -63,5 +64,31 @@ def rP():
     return jsonify({'tf': 'bien', 'envio':rs})
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=1000,debug=True)
+def recursivamente(ruta,aJson):
+    for aA in aJson:  # NORMAL
+        if '.' in   aA:#txt
+            print(ruta,'>>',aA,'<>',aJson[aA])
+        else:#folder
+            recursivamente(f'{ruta}/{aA}',aJson[aA])
+
+def recorrerJson():
+    txt="""
+{
+"carp1": {
+"carp2": {
+    "a.tx": "hola mundo"
+},
+"b.txt": "que onda"
+},
+"holis.txt": "tiburconcin"
+}
+    """
+    aJson = json.loads(txt)
+    for aA in aJson:#NORMAL
+        print(f'{aA}<>{aJson[aA]}')
+    recursivamente('', aJson)
+
+recorrerJson()
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0', port=1000,debug=True)#debug modo solo sirve para que se acutalice automaticamente
+    #FIXME:cambiar puerto a 5000 en el server
