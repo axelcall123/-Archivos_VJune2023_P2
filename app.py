@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, request,jsonify
 import boto3
 from Analizador.Comandos.create import Create
 from Analizador.Comandos.delete import Delete
+from Analizador.Comandos.copy import Copy
 
 
     
@@ -35,6 +36,16 @@ def delete():
         delete.ruta=request.json['path']
         delete.borrarBucket()
     return {"Eliminacion":"Archivo-Bucket"}
+
+
+@app.route('/copy',methods = ['POST'])
+def copy():
+    copy=Copy()
+    if(request.json['type_from']=="bucket")and(request.json['type_to']=="bucket"):
+        copy.de=request.json['from']
+        copy.a=request.json['to']
+        copy.copiarBucketToBucket()
+    return {"copy":"Archivo-Bucket-Bucket"}
 
 
 
