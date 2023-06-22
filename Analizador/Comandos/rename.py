@@ -28,7 +28,7 @@ class Rename:
         print(self.tipo)
         #limpiando path
         self.ruta=self.ruta.replace('/',  '', 1)
-        #eliminando archivo
+        #renombrando archivo
         if ".txt" in self.ruta:
             s3_client = boto3.client('s3')
             nombre_archivo_actual = self.ruta
@@ -39,7 +39,7 @@ class Rename:
             s3_client.copy_object(Bucket=nombre_bucket, CopySource={'Bucket': nombre_bucket, 'Key': nombre_archivo_actual}, Key=nombre_archivo_nuevo)
             s3_client.delete_object(Bucket=nombre_bucket, Key=nombre_archivo_actual)
             print('Archivo renombrado exitosamente.')
-        #eliminado directorio
+        #renombrando directorio
         else:
             s3_client = boto3.client('s3')
             nombre_bucket = '202001574'

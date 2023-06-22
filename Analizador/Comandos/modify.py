@@ -1,3 +1,4 @@
+import boto3
 class Modify:
     def __init__ (self,):
         self.contenido=""
@@ -21,6 +22,11 @@ class Modify:
         self.tipo=tipo
 
     def modificarBucket(self):
-        print(self.contenido)
-        print(self.ruta)
-        print(self.tipo)
+        self.ruta=self.ruta.replace('/',  '', 1)
+        self.contenido=self.contenido.replace('"',  '')
+        s3_client = boto3.client('s3')
+        nombre_archivo = self.ruta
+        nombre_bucket = '202001574'
+        contenido_modificado = self.contenido 
+        s3_client.put_object(Body=contenido_modificado, Bucket=nombre_bucket, Key=nombre_archivo)
+        print('Archivo modificado exitosamente.')
