@@ -4,6 +4,7 @@ from Analizador.Comandos.create import Create
 from Analizador.Comandos.delete import Delete
 from Analizador.Comandos.copy import Copy
 from Analizador.Comandos.transfer import Transfer
+from Analizador.Comandos.rename import Rename
 
 
     
@@ -56,6 +57,15 @@ def trasfer():
         trasfer.a=request.json['to']
         trasfer.trasferirBucketToBucket()
     return {"trasfer":"Archivo-Bucket-Bucket"}
+
+@app.route('/rename',methods = ['POST'])
+def rename():
+    rename=Rename()
+    if(request.json['type']=="bucket"):
+        rename.ruta=request.json['path']
+        rename.nombre=request.json['name']
+        rename.renombrarBucket()
+    return {"rename":"Archivo-Bucke"}
 
 
 
