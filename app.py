@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, request,jsonify
 import boto3
 from Analizador.Comandos.create import Create
+from Analizador.Comandos.delete import Delete
 
 
     
@@ -22,10 +23,18 @@ def create():
         create.contenido=request.json['body']
         create.ruta=request.json['path']
         create.creacionBucket()
-    #se crea post /create peticion
-    #se llama la funcion
      
-    return {"Creacion":"Exitosa"}
+    return {"Creacion":"Archivo-Bucket"}
+
+
+@app.route('/delete',methods = ['POST'])
+def delete():
+    delete=Delete()
+    if(request.json['type']=="bucket"):
+        delete.nombre=request.json['name']
+        delete.ruta=request.json['path']
+        delete.borrarBucket()
+    return {"Eliminacion":"Archivo-Bucket"}
 
 
 
