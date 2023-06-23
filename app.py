@@ -6,6 +6,7 @@ from Analizador.Comandos.copy import Copy
 from Analizador.Comandos.transfer import Transfer
 from Analizador.Comandos.rename import Rename
 from Analizador.Comandos.modify import Modify
+from Analizador.Comandos.deleteAll import DeleteAll
 
 
     
@@ -77,6 +78,13 @@ def modify():
         modify.contenido=request.json['body']
         modify.modificarBucket()
     return {"modify":"Archivo-Bucke"}
+
+@app.route('/delete_all',methods = ['POST'])
+def deleteAll():
+    deleteAll=DeleteAll()
+    if(request.json['type']=="bucket"):
+        deleteAll.borrarBucket()
+    return {"borrar":"borror TODO-Bucket"}
 
 
 
