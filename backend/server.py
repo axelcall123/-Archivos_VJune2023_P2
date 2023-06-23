@@ -83,6 +83,41 @@ def transferLS():
             _G.deleteSever(os.path.join(rutaEspecifica+rs["to"],file))
         return jsonify({'mensaje': json.loads(txt)})
 
+
+@app.route('/rename', methods=['PUT'])
+def rename():
+    '''{
+    "ruta":"/A/a.txt",
+    "nombre":"c.txt",
+    }'''
+    rs = request.get_json()
+    ruta=rutaEspecifica+rs["ruta"]
+    arrayRuta=ruta.split("/")
+    for iI in arrayRuta:
+        if(iI<len(range)-1):
+            nuevaRuta +="/"+arrayRuta[iI]
+    if os.path.exists(ruta):
+        if os.path.exists(nuevaRuta+rs["nombre"]):
+            return jsonify({'mensaje': 'ya existe el archivo'})
+        else:
+            os.rename(ruta, nuevaRuta+rs["nombre"])
+    else:
+        return jsonify({'mensaje': 'no existe ruta'})
+            
+
+@app.route('/modify', methods=['PUT'])
+def modify():
+    '''{
+    "ruta":"/A/a.txt",
+    "cuerpo":"hola xd no se que poner"",
+    }'''
+    rs = request.get_json()
+    if os.path.exists(rutaEspecifica+rs["ruta"]):
+        f = open(rutaEspecifica+rs["ruta"], "w")
+        f.write(rs["cuerpo"])
+        f.close()
+        return jsonify({'mensaje': 'archivo modificado'})
+
 if __name__ == '__main__':
     # debug modo solo sirve para que se acutalice automaticamente
     app.run(host='0.0.0.0', port=1000, debug=True)
