@@ -31,17 +31,17 @@ class Copy:
         #copy archivo
         if ".txt" in self.de:# si es un archivo 
             s3_client = boto3.client('s3')
-            nombre_archivo = "Archivos/"+self.de
+            nombre_archivo = "archivos/"+self.de
             nombre_bucket = '202001574'
             nombreFile=self.getNameFile(self.de)
-            ruta_archivo_destino = "Archivos/"+self.a+nombreFile
+            ruta_archivo_destino = "archivos/"+self.a+nombreFile
             s3_client.copy_object(Bucket=nombre_bucket, CopySource=f'{nombre_bucket}/{nombre_archivo}', Key=ruta_archivo_destino)
         #copy directorio
         else:
             s3_client = boto3.client('s3')
             nombre_bucket = '202001574'
-            directorio_origen = "Archivos/"+self.de
-            directorio_destino = "Archivos/"+self.a+self.de
+            directorio_origen = "archivos/"+self.de
+            directorio_destino = "archivos/"+self.a+self.de
             # Obtiene la lista de objetos en el directorio de origen
             response = s3_client.list_objects_v2(Bucket=nombre_bucket, Prefix=directorio_origen)
             # Copia cada objeto dentro del directorio de origen al directorio de destino

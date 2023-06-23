@@ -42,5 +42,5 @@ class Create:
         #Creando archivo o carpeta o ambos
         s3 = boto3.resource('s3')
         print("conectado al buked")
-        s3.Object("202001574", "Archivos/"+self.ruta+self.nombre).put(Body=self.contenido)
+        s3.Object("202001574", "archivos/"+self.ruta+self.nombre).put(Body=self.contenido)
         print("Archivo creado al bucket")

@@ -31,10 +31,10 @@ class Rename:
         #renombrando archivo
         if ".txt" in self.ruta:
             s3_client = boto3.client('s3')
-            nombre_archivo_actual = "Archivos/"+self.ruta
+            nombre_archivo_actual = "archivos/"+self.ruta
             print(nombre_archivo_actual)
             ruta=self.getRuta(self.ruta)
-            nombre_archivo_nuevo = "Archivos/"+ruta+self.nombre
+            nombre_archivo_nuevo = "archivos/"+ruta+self.nombre
             print(nombre_archivo_nuevo)
            
             nombre_bucket = '202001574'
@@ -45,11 +45,11 @@ class Rename:
         else:
             s3_client = boto3.client('s3')
             nombre_bucket = '202001574'
-            directorio_actual = "Archivos/"+self.ruta
+            directorio_actual = "archivos/"+self.ruta
             print({"nombre_archivo_actual":self.ruta})
             ruta=self.getRuta(self.ruta)
             self.nombre=self.nombre.replace('/',  '', 1)
-            directorio_nuevo = "Archivos/"+ruta+self.nombre
+            directorio_nuevo = "archivos/"+ruta+self.nombre
             print({"nombre_archivo_nuevo":ruta+self.nombre})
             response = s3_client.list_objects_v2(Bucket=nombre_bucket, Prefix=directorio_actual)
             for obj in response['Contents']:

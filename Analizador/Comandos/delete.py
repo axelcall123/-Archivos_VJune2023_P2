@@ -31,7 +31,7 @@ class Delete:
         #eliminando archivo
         if self.nombre!="":
             s3 = boto3.resource('s3')
-            archivo_objeto = s3.Object("202001574", "Archivos/"+self.ruta+self.nombre)
+            archivo_objeto = s3.Object("202001574", "archivos/"+self.ruta+self.nombre)
             # Elimina el archivo del bucket
             archivo_objeto.delete()
             print("Archivo eliminado al bucket")
@@ -41,7 +41,7 @@ class Delete:
             #todos los objetos en directorio
             allobjets=client.list_objects(Bucket="202001574")
             for a in allobjets['Contents']:
-                if "Archivos/"+self.ruta in a['Key'] and a['Key'] != "Archivos/"+self.ruta:
+                if "archivos/"+self.ruta in a['Key'] and a['Key'] != "archivos/"+self.ruta:
                     #eliminando todos los objetos (al quedar vacio se elimina)
                     client.delete_object(Bucket='202001574', Key=a['Key'])
         

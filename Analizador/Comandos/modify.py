@@ -25,7 +25,7 @@ class Modify:
         self.ruta=self.ruta.replace('/',  '', 1)
         self.contenido=self.contenido.replace('"',  '')
         s3_client = boto3.client('s3')
-        nombre_archivo = "Archivos/"+self.ruta
+        nombre_archivo = "archivos/"+self.ruta
         nombre_bucket = '202001574'
         contenido_modificado = self.contenido 
         s3_client.put_object(Body=contenido_modificado, Bucket=nombre_bucket, Key=nombre_archivo)
