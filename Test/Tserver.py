@@ -60,8 +60,7 @@ def listado():
 
 @app.route('/descarga', methods=['PUT'])  # listado
 def descarga():
-    # s3.download_file(name,'dos.txt','./Test/dos.txt')
-    s3.download_file(name, 'nuevo/', './Test/nuevo')
+    s3.download_file(name,'dos.txt','./Test/dos.txt')
     return jsonify({'status': 'descargado'})
 
 @app.route('/get_data', methods=['GET'])
@@ -75,7 +74,7 @@ def rP():
 
 
     #https://stackoverflow.com/questions/10434599/get-the-data-received-in-a-flask-request
-    #http://192.168.0.29:1000/get_data
+    #http://192.168.0.29:1000/get_dataS
     '''envio json
     {
         "txt":"text",
