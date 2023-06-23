@@ -1,6 +1,6 @@
 from flask import Flask,jsonify,request,Response
 import boto3
-from ...key import *
+from key import *
 import json
 app = Flask(__name__)
 
@@ -14,12 +14,31 @@ def index():
     return 'Welcome to Flask with AWS S3 Example!'
   
 #LISTADO DEL BUCKET
-
 @app.route('/uploadS', methods=['PUT'])#se necesita get, post al mismo tiempo
 def upload_file():
    rs = request.get_json()
    s3.put_object(Body=open(rs["url"], 'rb'), Bucket=name, Key=rs["key"])
    return jsonify({'status': 'subido'})
+
+@app.route('/listado2', methods=['GET'])#se necesita get, post al mismo tiempo
+def listado2():
+    response = s3.list_objects(
+        Bucket=name, Prefix='nuevo/', Delimiter='/')
+    folders = []
+    files = []
+    # Retrieve folders
+    if 'CommonPrefixes' in response:
+        for prefix in response['CommonPrefixes']:
+            folder_name = prefix['Prefix']
+            folders.append(folder_name)
+
+    # Retrieve files
+    if 'Contents' in response:
+        for obj in response['Contents']:
+            file_name = obj['Key']
+            files.append(file_name)
+    print()
+    return jsonify({'files': files, 'folders': folders})
 
 @app.route('/listado', methods=['GET'])#listado
 def listado():
@@ -31,12 +50,19 @@ def listado():
         if obj['Key'].endswith('/'):
             folders.append(obj['Key'])
         else:
-            txt = obj['body'].read().decode('utf-8')
-            files.append(obj['Key'])
+            respuesta=s3.get_object(Bucket=name, Key=obj['Key'])
+            content = respuesta['Body'].read().decode('utf-8')
+            files.append([obj['Key'],content])
 
     # Return the list of files and folders as JSON
     return jsonify({'files': files, 'folders': folders})
 
+
+@app.route('/descarga', methods=['PUT'])  # listado
+def descarga():
+    # s3.download_file(name,'dos.txt','./Test/dos.txt')
+    s3.download_file(name, 'nuevo/', './Test/nuevo')
+    return jsonify({'status': 'descargado'})
 
 @app.route('/get_data', methods=['GET'])
 def rP():
@@ -63,7 +89,6 @@ def rP():
     # #print(rs["txt"],rs["hola"])
     return jsonify({'tf': 'bien', 'envio':rs})
 
-
 def recursivamente(ruta,aJson):
     for aA in aJson:  # NORMAL
         if '.' in   aA:#txt
@@ -89,7 +114,7 @@ def recorrerJson():
         print(f'{aA}<>{aJson[aA]}')
     recursivamente('', aJson)
 
-recorrerJson()
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=1000,debug=True)#debug modo solo sirve para que se acutalice automaticamente
+# recorrerJson()
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=1000,debug=True)#debug modo solo sirve para que se acutalice automaticamente
     #FIXME:cambiar puerto a 5000 en el server
