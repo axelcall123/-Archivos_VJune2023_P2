@@ -1,4 +1,6 @@
 import boto3
+from pathlib import Path
+
 class Copy:
     def __init__ (self,):
         self.de=""
@@ -61,5 +63,29 @@ class Copy:
             if(".txt" in element):
                 name=element
         return name
+    
+    def copiarServerToBucket(self):
+        if ".txt" in self.de:# si es un archivo 
+            s3_client = boto3.client('s3')
+            s3_client.upload_file("../archivos/"+self.de, "202001574", "archivos/+"+self.a)
+        #copy directorio
+        else:
+            s3_client = boto3.client('s3')
+            # Ruta del directorio local que deseas transferir
+            directorio_local = '../archivos/'+self.de
+            # Nombre del bucket de Amazon S3
+            nombre_bucket = '202001574'
+            # Recorre el directorio y subdirectorios
+            for ruta_archivo_local in Path(directorio_local).rglob('*'):
+                    if ruta_archivo_local.is_file():
+                            # Obtiene la ruta relativa del archivo
+                            ruta_relativa = str(ruta_archivo_local.relative_to(directorio_local))
+                            ruta_relativa=ruta_relativa.replace("\\","/")
+                            # Carga el archivo local en el bucket de Amazon S3
+                            s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, "archivos/"+ruta_relativa)
+                    print('Elementos transferidos exitosamente al bucket de Amazon S3.')
+
+    
+
 
 

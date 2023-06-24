@@ -26,6 +26,9 @@ def listado():
     files = []
     folders = []
     response = s3.list_objects_v2(Bucket=name)
+    
+    print(response['Contents'])
+
     for obj in response['Contents']:
     #for obj in response.get('Contents', []):
         if obj['Key'].endswith('/'):

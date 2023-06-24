@@ -45,11 +45,13 @@ def delete():
 @app.route('/copy',methods = ['POST'])
 def copy():
     copy=Copy()
+    copy.de=request.json['from']
+    copy.a=request.json['to']
     if(request.json['type_from']=="bucket")and(request.json['type_to']=="bucket"):
-        copy.de=request.json['from']
-        copy.a=request.json['to']
         copy.copiarBucketToBucket()
-    return {"copy":"Archivo-Bucket-Bucket"}
+        return {"copy":"Archivo-Bucket-Bucket"}
+    if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
+        copy.copiarServerToBucket()
 
 @app.route('/transfer',methods = ['POST'])
 def trasfer():
@@ -59,6 +61,7 @@ def trasfer():
         trasfer.a=request.json['to']
         trasfer.trasferirBucketToBucket()
     return {"trasfer":"Archivo-Bucket-Bucket"}
+    #se cumple
 
 @app.route('/rename',methods = ['POST'])
 def rename():

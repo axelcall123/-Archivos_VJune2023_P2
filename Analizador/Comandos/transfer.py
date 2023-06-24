@@ -63,15 +63,19 @@ class Transfer:
             if(".txt" in element):
                 name=element
         return name
-    """
+    
     def trasferirBucketToServer(self):
+        pass
+
     def trasferirServerToBucket(self):
+        #ver lo que hay local
+        #funcion que enlista y busca
         #Localizar 
         # el archivo local
         #Subirlo
         s3_client = boto3.client('s3')
         s3_client.upload_file(ruta_archivo_local, nombre_bucket, nombre_archivo_s3)
-"""
+
 
 
 
