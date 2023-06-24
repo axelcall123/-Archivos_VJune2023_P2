@@ -73,6 +73,27 @@ class Transfer:
             os.remove("../archivos/"+self.de)
         # si es un directorio
         else:
+            s3_client = boto3.client('s3')
+            # Ruta del directorio local que deseas transferir
+            directorio_local = "../archivos/"+self.de
+            # Nombre del bucket de Amazon S3
+            nombre_bucket = '202001574'
+            # Recorre el directorio y subdirectorios
+            for ruta_archivo_local in Path(directorio_local).rglob('*'):
+                if ruta_archivo_local.is_file():
+                    # Obtiene la ruta relativa del archivo
+                    ruta_relativa = str(ruta_archivo_local.relative_to(directorio_local))
+                    ruta_relativa=ruta_relativa.replace("\\","/")
+                    # Carga el archivo local en el bucket de Amazon S3
+                    s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, "archivos/"+ruta_relativa)
+            for archivo in os.listdir(directorio_local):
+                ruta_archivo = os.path.join(directorio_local, archivo)
+                # Eliminar el archivo si es un archivo
+                if os.path.isfile(ruta_archivo):
+                    os.remove(ruta_archivo)
+                    # Eliminar el directorio si es un subdirectorio
+                elif os.path.isdir(ruta_archivo):
+                    shutil.rmtree(ruta_archivo)
 
 
 
