@@ -8,7 +8,10 @@ from Analizador.Comandos.rename import Rename
 from Analizador.Comandos.modify import Modify
 from Analizador.Comandos.deleteAll import DeleteAll
 from Analizador.Comandos.backup import Backup
+<<<<<<< HEAD
 from Analizador.Comandos.recovery import Recovery
+=======
+>>>>>>> main
 
 
     
@@ -102,6 +105,7 @@ def backUp():
     if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
         backup.backupservertobucket()
         return {"backUp":"Servidor to bucket"}
+<<<<<<< HEAD
     
 @app.route('/recovery',methods = ['POST'])
 def recovery():
@@ -111,6 +115,8 @@ def recovery():
     if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
         recovery.recoveryBuckettoServer()
         return {"recovery":"Servidor to bucket"}
+=======
+>>>>>>> main
 
 
 
