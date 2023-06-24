@@ -7,6 +7,7 @@ from Analizador.Comandos.transfer import Transfer
 from Analizador.Comandos.rename import Rename
 from Analizador.Comandos.modify import Modify
 from Analizador.Comandos.deleteAll import DeleteAll
+from Analizador.Comandos.backup import Backup
 
 
     
@@ -52,17 +53,19 @@ def copy():
         return {"copy":"Archivo-Bucket-Bucket"}
     if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
         copy.copiarServerToBucket()
+        return {"copy":"Archivo-server-Bucket"}
 
 @app.route('/transfer',methods = ['POST'])
 def trasfer():
     trasfer=Transfer()
+    trasfer.de=request.json['from']
+    trasfer.a=request.json['to']
     if(request.json['type_from']=="bucket")and(request.json['type_to']=="bucket"):
-        trasfer.de=request.json['from']
-        trasfer.a=request.json['to']
         trasfer.trasferirBucketToBucket()
         return {"trasfer":"Archivo-Bucket-Bucket"}
     if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
         trasfer.trasferirServerToBucket()
+        return {"trasfer":"Archivo-server-Bucket"}
 
 @app.route('/rename',methods = ['POST'])
 def rename():
@@ -89,6 +92,15 @@ def deleteAll():
     if(request.json['type']=="bucket"):
         deleteAll.borrarBucket()
     return {"borrar":"borror TODO-Bucket"}
+
+@app.route('/backup',methods = ['POST'])
+def backUp():
+    backup=Backup()
+    backup.tipoDe=request.json['from']
+    backup.tipoA=request.json['to']
+    if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
+        backup.backupservertobucket()
+        return {"backUp":"Servidor to bucket"}
 
 
 
