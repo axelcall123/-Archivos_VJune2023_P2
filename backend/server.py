@@ -6,6 +6,7 @@ import os
 import boto3
 from key import *
 import json
+import requests
 app = Flask(__name__)
 s3 = boto3.client(
     's3',
@@ -17,7 +18,7 @@ def index():
     return 'Welcome to Flask'
 
 @app.route('/create', methods=['POST'])#crea archviso
-def archivoC():
+def archivoC_server():
     '''{
     "ruta":"/ar/",
     "nombre":"a.txt",
@@ -33,7 +34,7 @@ def archivoC():
     return jsonify({'mensaje': 'archivo creado',})
 
 @app.route('/create', methods=['DELETE'])#elimina archivo
-def archivoD():
+def archivoD_server():
     '''{
     "ruta":"/ar/",
     "nombre":"a(1).txt" {opcional}
@@ -45,7 +46,7 @@ def archivoD():
     return jsonify({'mensaje': _G.deleteSever(ruta)})
     
 @app.route('/copy', methods=['POST'])  # copiar archivo server->server; bucket->server
-def copySB():
+def copySB_server():
     '''{
     "comando":"b->s",|"s->s"
     "from":"/A/a.txt","/","/hola.txt","/a/b/"
@@ -53,7 +54,7 @@ def copySB():
     }'''
     rs = request.get_json() # json
     if rs["comando"]=='s->s':# de server a server
-        
+        #FIXME: para hacerlo fuera de archivos
         return jsonify({'mensaje': _G.copySever(rutaSer+rs["to"], rutaSer+rs["from"])})
     elif rs["comando"] == 'b->s':  # de bucket a server
         if not _G.existeBucket(s3, name, f'{rutaB}{rs["from"]}'):
@@ -79,7 +80,7 @@ def copySB():
         return jsonify({'mensaje': 'copio el folder'})
 
 @app.route('/copy', methods=['GET'])# listado de los archivos del server
-def copyLS():
+def copyLS_server():
     '''{
     "to":"/B/"
     }'''
@@ -89,7 +90,7 @@ def copyLS():
         return jsonify({'mensaje': json.loads(txt)})
 
 @app.route('/transfer', methods=['POST'])# tranfiere archivo server->server; bucket->server
-def tranferSB():
+def tranferSB_server():
     '''{
     "comando":"b->s",|"s->s"
     "from":"/A/a.txt","/","/hola.txt","/a/b/"
@@ -136,7 +137,7 @@ def tranferSB():
     return jsonify({'mensaje': 'que paso?'})
 
 @app.route('/transfer', methods=['GET'])  # listado de los archivos del server
-def transferLS():
+def transferLS_server():
     rs = request.get_json()  # json
     if 'to' in rs:  # de server a bucket
         txt = "{"+_G.listadoJson(rutaSer+rs["to"])+"}"
@@ -144,8 +145,8 @@ def transferLS():
             _G.deleteSever(os.path.join(rutaSer+rs["to"],file))
         return jsonify({'mensaje': json.loads(txt)})
 
-@app.route('/rename', methods=['PUT'])
-def rename():
+@app.route('/rename', methods=['PUT'])# renombra un archivo
+def rename_server():
     '''{
     "ruta":"/A/a.txt",
     "nombre":"c.txt"
@@ -162,11 +163,11 @@ def rename():
     else:
         return jsonify({'mensaje': 'no existe ruta'})
             
-@app.route('/modify', methods=['PUT'])
-def modify():
+@app.route('/modify', methods=['PUT'])# modifica un archivo
+def modify_server():
     '''{
     "ruta":"/A/a.txt",
-    "cuerpo":"hola xd no se que poner"",
+    "cuerpo":"hola xd no se que poner""
     }'''
     rs = request.get_json()
     if os.path.exists(rutaSer+rs["ruta"]):
@@ -174,6 +175,37 @@ def modify():
         f.write(rs["cuerpo"])
         f.close()
         return jsonify({'mensaje': 'archivo modificado'})
+
+@app.route('/backupS', methods=['GET'])# elimina un archivo
+def backup_server():
+    '''{
+    "to":"/B/",
+    "from":"A/a.txt",
+    "ip":"192.168.0.1", {op}
+    "port":"1000", {op}
+    "name":"back#1"
+    }'''
+    rs = request.get_json()
+    if 'ip' in rs and 'port' in rs:#Bacup en otro lugar
+        txt = "{"+_G.listadoJson(rutaSer+rs["to"])+"}"
+        res = requests.get(
+            url=f"http://{res['ip']:{res['port']}}/get_data",  # URL METODO
+            json={"to":rs["to"],"backup": rs['name'],"archivos":txt}  # LO QUE ENVIO
+        )
+        print("tkitner>", json.loads(res.text))
+    else:#backup en el nuestro
+        if res["to"]=='server':#solo creo folder y copio
+            res = requests.post(
+                url=ipMine+"copy",  # FIXME:NO SE
+                json={"comando": "s->s", "to":rs["to"]+rs["name"],"from":rs["from"]}  # LO QUE ENVIO
+            )
+        elif res["to"]=='bucket':#envio la informacion
+            txt = "{"+_G.listadoJson(rutaSer+rs["to"])+"}"
+            res = requests.get(
+                url=ipMine+"quiensabe",  #FIXME:NO SE
+                json={"to": rs["to"], "backup": rs['name'],
+                  "archivos": txt}  # LO QUE ENVIO
+            )
 
 if __name__ == '__main__':
     # debug modo solo sirve para que se acutalice automaticamente
