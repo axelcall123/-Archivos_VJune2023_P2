@@ -16,7 +16,7 @@ def creRenameL(idFolderRaiz: str, nombre: str) -> str:
 
 def deleteSever(ruta):
     if (os.path.exists(ruta)):  # existe ruta
-        if '.' in ruta:  # es archivo
+        if '.txt' in ruta:  # es archivo
             os.remove(ruta)
         else:  # es carpeta
             shutil.rmtree(ruta)
@@ -25,31 +25,47 @@ def deleteSever(ruta):
         return 'ruta no encontrada'
 
 def copySever(urlTo, urlFrom):
+    if not(os.path.exists(urlTo) and os.path.exists(urlFrom)):  # existe es carpeta
+        return 'ruta no existe'
+    if '.txt' in urlFrom:
+        rename = creRenameL(urlTo, urlFrom.split('/')[-1])
+        nuevoUrl = os.path.join(urlTo, rename)  # renombro por si existe
+        shutil.copy(urlFrom, nuevoUrl)
+        return 'archivo copiado'
+
     for item in os.listdir(urlFrom):
         url1 = os.path.join(urlTo, item)
         url2 = os.path.join(urlFrom, item)
-        if os.path.exists(url1) and not '.' in item:  # existe es carpeta
+        if os.path.exists(url1) and not '.txt' in item:  # existe es carpeta
             copySever(url1, url2)
-        elif not os.path.exists(url1) and not '.' in item:  # no existe es carpeta
+        elif not os.path.exists(url1) and not '.txt' in item:  # no existe es carpeta
             shutil.copytree(url2, url1)
         else:  # no existe es archivo
             rename = creRenameL(urlTo, item)
             nuevoUrl = os.path.join(urlTo, rename)  # renombro por si existe
             shutil.copy(url2, nuevoUrl)
-
+    return 'archivos copiados'
 def transferSersver(urlTo, urlFrom):
+    if not (os.path.exists(urlTo) and os.path.exists(urlFrom)):  # existe es carpeta
+        return 'ruta no existe'
+    if '.txt' in urlFrom:
+        rename = creRenameL(urlTo, urlFrom.split('/')[-1])
+        nuevoUrl = os.path.join(urlTo, rename)  # renombro por si existe
+        shutil.move(urlFrom, nuevoUrl)
+        return 'archivo tranferido'
     for item in os.listdir(urlFrom):
         url1 = os.path.join(urlTo, item)
         url2 = os.path.join(urlFrom, item)
-        if os.path.exists(url1) and not '.' in item:  # existe es carpeta
+        if os.path.exists(url1) and not '.txt' in item:  # existe es carpeta
             transferSersver(url1, url2)
-        elif not os.path.exists(url1) and not '.' in item:  # no existe es carpeta
+        elif not os.path.exists(url1) and not '.txt' in item:  # no existe es carpeta
             shutil.copytree(url2, url1)  # copio
             shutil.rmtree(url2)  # elimino tree
         else:  # no existe es archivo
             rename = creRenameL(urlTo, item)
             nuevoUrl = os.path.join(urlTo, rename)  # renombro por si existe
             shutil.move(url2, nuevoUrl)
+    return 'archivos transferidos'
 
 def readTxt(url):
     f = open(url, 'r')
@@ -61,7 +77,7 @@ def listadoJson(url) -> json:  # posicion es para saber si es el primero, subcar
     listado = os.listdir(url)
     txtJson = ''
     for iI in range(len(listado)):
-        if '.' in listado[iI]:  # es archivo
+        if '.txt' in listado[iI]:  # es archivo
             if iI < len(listado)-1:  # ultimo item
                 txtJson += '"'+listado[iI]+'":"' + \
                     readTxt(os.path.join(url, listado[iI]))+'",'
@@ -80,3 +96,20 @@ def listadoJson(url) -> json:  # posicion es para saber si es el primero, subcar
                     '":{'+listadoJson(os.path.join(url, listado[iI]))+'}'
                 return txtJson
     return ''
+
+def listado(url):
+    array=url.split('/')
+    txt=''
+    for a in range(len(array)-1):
+        if array[a]=='':
+            array.remove(a)
+        else:
+            txt +=array[a]+'/'
+    return txt
+
+def existeBucket(s3,name,f_key):
+    try:
+        s3.head_object(Bucket=name, Key=f_key)
+        return True
+    except:
+        return False

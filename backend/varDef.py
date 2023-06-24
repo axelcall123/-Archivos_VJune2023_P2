@@ -1,1 +1,2 @@
-rutaEspecifica='./backend/archivos'
+rutaSer='./archivos'
+rutaB='archivoT1'

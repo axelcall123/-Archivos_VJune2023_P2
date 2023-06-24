@@ -23,10 +23,12 @@ def upload_file():
 @app.route('/listado2', methods=['GET'])#se necesita get, post al mismo tiempo
 def listado2():
     response = s3.list_objects(
-        Bucket=name, Prefix='nuevo/', Delimiter='/')
+        Bucket=name, Prefix='nuevo/', Delimiter='/')#delmita solo la carpeta, no pasa a la subcarpeta
     folders = []
     files = []
     # Retrieve folders
+    for a in response:
+        print(a)
     if 'CommonPrefixes' in response:
         for prefix in response['CommonPrefixes']:
             folder_name = prefix['Prefix']
@@ -44,15 +46,25 @@ def listado2():
 def listado():
     files = []
     folders = []
-    response = s3.list_objects_v2(Bucket=name)
+    response = s3.list_objects_v2(Bucket=name, Prefix='archivos/')
+    
+    # Iterate over the objects using response['Contents']
+    for obj in response['Contents']:
+        print('Object1:', obj['Key'])
+
+    # Iterate over the objects using response.get('Contents', [])
+    for obj in response.get('Contents', []):
+        print('Object2:', obj['Key'])
+
     for obj in response['Contents']:
     #for obj in response.get('Contents', []):
         if obj['Key'].endswith('/'):
             folders.append(obj['Key'])
         else:
             respuesta=s3.get_object(Bucket=name, Key=obj['Key'])
-            content = respuesta['Body'].read().decode('utf-8')
-            files.append([obj['Key'],content])
+            content = respuesta['Body'].read().decode('utf-8')#contenido
+            #             ruta          carpetas,array           ,     nombre
+            files.append([obj['Key'], obj['Key'].split('/')[-1]])
 
     # Return the list of files and folders as JSON
     return jsonify({'files': files, 'folders': folders})
@@ -60,7 +72,7 @@ def listado():
 
 @app.route('/descarga', methods=['PUT'])  # listado
 def descarga():
-    s3.download_file(name,'dos.txt','./Test/dos.txt')
+    s3.download_file(name,'dos.txt','./Test/dos.txt')#ubicacion boto,ubicacion local
     return jsonify({'status': 'descargado'})
 
 @app.route('/get_data', methods=['GET'])
