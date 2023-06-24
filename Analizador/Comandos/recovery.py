@@ -31,7 +31,7 @@ class Recovery:
         # Ruta del directorio en el bucket que deseas descargar
         ruta_directorio_s3 = self.name
         # Directorio local donde se guardarán los archivos descargados
-        directorio_local = '../archivos/'
+        directorio_local = './archivos/'
         # Recorre los archivos y subdirectorios dentro del directorio en el bucket
         response = s3_client.list_objects_v2(Bucket=nombre_bucket, Prefix=ruta_directorio_s3)
         for obj in response['Contents']:

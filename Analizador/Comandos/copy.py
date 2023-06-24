@@ -67,12 +67,16 @@ class Copy:
     def copiarServerToBucket(self):
         if ".txt" in self.de:# si es un archivo 
             s3_client = boto3.client('s3')
-            s3_client.upload_file("../archivos/"+self.de, "202001574", "archivos/+"+self.a)
+            print({"from":"./archivos/"+self.de})
+            self.a=self.a.replace('/',  '', 1)
+            nombreFile=self.getNameFile(self.de)
+            print({"to":"archivos/"+self.a})
+            s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile)
         #copy directorio
         else:
             s3_client = boto3.client('s3')
             # Ruta del directorio local que deseas transferir
-            directorio_local = '../archivos/'+self.de
+            directorio_local = './archivos/'+self.de
             # Nombre del bucket de Amazon S3
             nombre_bucket = '202001574'
             # Recorre el directorio y subdirectorios

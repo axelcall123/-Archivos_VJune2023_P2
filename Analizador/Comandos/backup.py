@@ -28,12 +28,11 @@ class Backup:
         print(self.name)
         s3_client = boto3.client('s3')
         # Ruta del directorio local que deseas transferir
-        directorio_local = '../archivos/'
+        directorio_local = './archivos/'
         # Nombre del bucket de Amazon S3
         nombre_bucket = '202001574'
         # Recorre el directorio y subdirectorios
         for ruta_archivo_local in Path(directorio_local).rglob('*'):
-<<<<<<< HEAD
             if ruta_archivo_local.is_file():
                 # Obtiene la ruta relativa del archivo
                 ruta_relativa = str(ruta_archivo_local.relative_to(directorio_local))
@@ -42,13 +41,3 @@ class Backup:
                 # Carga el archivo local en el bucket de Amazon S3
                 s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, self.name+ruta_relativa)
             print('Elementos transferidos exitosamente al bucket de Amazon S3.')
-=======
-                if ruta_archivo_local.is_file():
-                        # Obtiene la ruta relativa del archivo
-                        ruta_relativa = str(ruta_archivo_local.relative_to(directorio_local))
-                        ruta_relativa=ruta_relativa.replace("\\","/")
-                        print(ruta_relativa)
-                        # Carga el archivo local en el bucket de Amazon S3
-                        s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, self.name+ruta_relativa)
-                print('Elementos transferidos exitosamente al bucket de Amazon S3.')
->>>>>>> main
