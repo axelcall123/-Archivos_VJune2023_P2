@@ -1,5 +1,7 @@
 import boto3
-
+from pathlib import Path
+import os
+import shutil
 class Transfer:
     def __init__ (self,):
         self.de=""
@@ -25,7 +27,7 @@ class Transfer:
     def typeFrom(self,tipoA):
         self.tipoA=tipoA
 
-    def trasferirBucketToBucket(self):#FIXME: es por self.modo
+    def trasferirBucketToBucket(self):
         #limpiando path
         self.de=self.de.replace('/',  '', 1)
         self.a=self.a.replace('/',  '', 1)
@@ -64,17 +66,13 @@ class Transfer:
                 name=element
         return name
     
-    def trasferirBucketToServer(self):
-        pass
-
     def trasferirServerToBucket(self):
-        #ver lo que hay local
-        #funcion que enlista y busca
-        #Localizar 
-        # el archivo local
-        #Subirlo
-        s3_client = boto3.client('s3')
-        s3_client.upload_file(ruta_archivo_local, nombre_bucket, nombre_archivo_s3)
+        if ".txt" in self.de:# si es un archivo
+            s3_client = boto3.client('s3')
+            s3_client.upload_file("../archivos/"+self.de, "202001574", "archivos/"+self.a)
+            os.remove("../archivos/"+self.de)
+        # si es un directorio
+        else:
 
 
 

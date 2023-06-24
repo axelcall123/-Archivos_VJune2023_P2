@@ -60,8 +60,9 @@ def trasfer():
         trasfer.de=request.json['from']
         trasfer.a=request.json['to']
         trasfer.trasferirBucketToBucket()
-    return {"trasfer":"Archivo-Bucket-Bucket"}
-    #se cumple
+        return {"trasfer":"Archivo-Bucket-Bucket"}
+    if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
+        trasfer.trasferirServerToBucket()
 
 @app.route('/rename',methods = ['POST'])
 def rename():
