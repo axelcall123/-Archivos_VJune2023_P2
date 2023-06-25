@@ -97,12 +97,12 @@ def listadoJson(url) -> json:  # posicion es para saber si es el primero, subcar
                 return txtJson
     return ''
 
-def listado(url):
+def listado(url):#listado sin el txt
     array=url.split('/')
     txt=''
     for a in range(len(array)-1):
         if array[a]=='':
-            array.remove(a)
+            continue
         else:
             txt +=array[a]+'/'
     return txt

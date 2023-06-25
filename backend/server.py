@@ -13,6 +13,7 @@ s3 = boto3.client(
     aws_access_key_id=acces_key,
     aws_secret_access_key=secret_acces_key
 )
+
 @app.route('/')
 def index():
     return 'Welcome to Flask'
@@ -44,7 +45,8 @@ def archivoD_server():
     if "nombre" in rs:
         ruta=ruta+rs["nombre"]
     return jsonify({'mensaje': _G.deleteSever(ruta)})
-    
+
+#ELIMINADO POR F    
 @app.route('/copy', methods=['POST'])  # copiar archivo server->server; bucket->server
 def copySB_server():
     '''{
@@ -89,6 +91,7 @@ def copyLS_server():
         txt="{"+_G.listadoJson(rutaSer+rs["to"])+"}"
         return jsonify({'mensaje': json.loads(txt)})
 
+#ELMINADO POR F
 @app.route('/transfer', methods=['POST'])# tranfiere archivo server->server; bucket->server
 def tranferSB_server():
     '''{
@@ -176,37 +179,79 @@ def modify_server():
         f.close()
         return jsonify({'mensaje': 'archivo modificado'})
 
+@app.route('/delete_all', methods=['PUT'])# elimina todo
+def deleteLL_server():
+    res = requests.post(
+        url=ipMine+"copy",  # FIXME:NO SE
+        # LO QUE ENVIO
+        json={"ruta": "/"}
+    )
+    return jsonify({'mensaje': 'todo fue eliminado'})
+
 @app.route('/backupS', methods=['GET'])# elimina un archivo
 def backup_server():
     '''{
-    "to":"/B/",
-    "from":"A/a.txt",
+    "type":"server",|"bucket"
     "ip":"192.168.0.1", {op}
     "port":"1000", {op}
     "name":"back#1"
     }'''
     rs = request.get_json()
     if 'ip' in rs and 'port' in rs:#Bacup en otro lugar
-        txt = "{"+_G.listadoJson(rutaSer+rs["to"])+"}"
+        txt = "{"+_G.listadoJson(rutaSer)+"}"
         res = requests.get(
             url=f"http://{res['ip']:{res['port']}}/get_data",  # URL METODO
-            json={"to":rs["to"],"backup": rs['name'],"archivos":txt}  # LO QUE ENVIO
+            json={"type":rs["to"],"name": rs['name'],"archivos":txt}  # LO QUE ENVIO
         )
         print("tkitner>", json.loads(res.text))
     else:#backup en el nuestro
         if res["to"]=='server':#solo creo folder y copio
             res = requests.post(
                 url=ipMine+"copy",  # FIXME:NO SE
-                json={"comando": "s->s", "to":rs["to"]+rs["name"],"from":rs["from"]}  # LO QUE ENVIO
+                json={"comando": "s->s", "to":f'/{rs["name"]}/',"from":'/'}  # LO QUE ENVIO
             )
-        elif res["to"]=='bucket':#envio la informacion
-            txt = "{"+_G.listadoJson(rutaSer+rs["to"])+"}"
-            res = requests.get(
-                url=ipMine+"quiensabe",  #FIXME:NO SE
-                json={"to": rs["to"], "backup": rs['name'],
-                  "archivos": txt}  # LO QUE ENVIO
-            )
+        elif res["to"] == 'bucket':  # envio la informacion
+            # txt = "{"+_G.listadoJson(rutaSer+rs["to"])+"}"
+            # res = requests.get(
+            #     url=ipMine+"quiensabe",  #FIXME:NO SE
+            #     json={"to": rs["to"], "backup": rs['name'],
+            #       "archivos": txt}  # LO QUE ENVIO
+            # )
+            print('copio al bucket')
 
+
+@app.route('recoveryS', methods=['GET'])
+def recover_server():
+    '''{
+    "type":"server",|"bucket"
+    "ip":"192.168.0.1", {op}
+    "port":"1000", {op}
+    "name":"back#1"
+    }'''
+    rs = request.get_json()
+    if 'ip' in rs and 'port' in rs:  # recovery en otro lugar
+        res = requests.get(
+            url=f"http://{res['ip']:{res['port']}}/get_data",  # URL METODO
+            json={"to": rs["to"], "name": rs['name']}  # LO QUE ENVIO
+        )
+        print("tkitner>", json.loads(res.text)) # recupero y escrivo en el server
+    else:  # recovery en el nuestro
+        if res["to"] == 'server':  # solo creo folder y copio
+            res = requests.post(
+                url=ipMine+"copy",  # FIXME:NO SE
+                # LO QUE ENVIO
+                json={"comando": "s->s",
+                      "to":"/","from":f'/{rs["name"]}/'}
+            )
+        elif res["to"] == 'bucket':  # envio la informacion
+            # txt = "{"+_G.listadoJson(rutaSer+rs["to"])+"}"
+            # res = requests.get(
+            #     url=ipMine+"quiensabe",  # FIXME:NO SE
+            #     json={"to": rs["to"], "backup": rs['name'],
+            #           "archivos": txt}  # LO QUE ENVIO
+            # )
+            print('recupero del bucket')
+            
 if __name__ == '__main__':
     # debug modo solo sirve para que se acutalice automaticamente
     app.run(host='0.0.0.0', port=1000, debug=True)
