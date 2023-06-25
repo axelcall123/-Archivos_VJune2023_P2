@@ -223,7 +223,7 @@ def backup_server():
             print('copio al bucket')
 
 
-@app.route('recoveryS', methods=['GET'])
+@app.route('/recoveryS', methods=['GET'])
 def recover_server():
     '''{
     "type":"server",|"bucket"
