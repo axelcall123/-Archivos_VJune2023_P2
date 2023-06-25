@@ -97,25 +97,26 @@ def deleteAll():
 @app.route('/backup',methods = ['POST'])
 def backUp():
     backup=Backup()
-    backup.tipoDe=request.json['from']
-    backup.tipoA=request.json['to']
     if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
+        backup.name=request.json['name']
         backup.backupservertobucket()
         return {"backUp":"Servidor to bucket"}
     
 @app.route('/recovery',methods = ['POST'])
 def recovery():
     recovery=Recovery()
-    recovery.tipoDe=request.json['from']
-    recovery.tipoA=request.json['to']
-    if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
+    if(request.json['type_from']=="bucket")and(request.json['type_to']=="server"):
+        recovery.name=request.json['name']
         recovery.recoveryBuckettoServer()
         return {"recovery":"Servidor to bucket"}
 
 
 
 if __name__== "__main__":
-    app.run(debug=True,port=3000)
+    app.run(host='0.0.0.0',debug=True,port=3000)
+
+
+
 
 
 
