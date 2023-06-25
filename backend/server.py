@@ -46,7 +46,7 @@ def archivoD_server():
         ruta=ruta+rs["nombre"]
     return jsonify({'mensaje': _G.deleteSever(ruta)})
 
-#ELIMINADO POR F    
+  
 @app.route('/copy', methods=['POST'])  # copiar archivo server->server; bucket->server
 def copySB_server():
     '''{
@@ -148,6 +148,7 @@ def transferLS_server():
             _G.deleteSever(os.path.join(rutaSer+rs["to"],file))
         return jsonify({'mensaje': json.loads(txt)})
 
+
 @app.route('/rename', methods=['PUT'])# renombra un archivo
 def rename_server():
     '''{
@@ -179,6 +180,7 @@ def modify_server():
         f.close()
         return jsonify({'mensaje': 'archivo modificado'})
 
+
 @app.route('/delete_all', methods=['PUT'])# elimina todo
 def deleteLL_server():
     res = requests.post(
@@ -187,6 +189,7 @@ def deleteLL_server():
         json={"ruta": "/"}
     )
     return jsonify({'mensaje': 'todo fue eliminado'})
+
 
 @app.route('/backupS', methods=['GET'])# elimina un archivo
 def backup_server():
@@ -250,8 +253,9 @@ def recover_server():
             #     json={"to": rs["to"], "backup": rs['name'],
             #           "archivos": txt}  # LO QUE ENVIO
             # )
-            print('recupero del bucket')
-            
+            print('recupero del bucket')#copiar normal
+
+
 if __name__ == '__main__':
     # debug modo solo sirve para que se acutalice automaticamente
     app.run(host='0.0.0.0', port=1000, debug=True)
