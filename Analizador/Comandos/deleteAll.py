@@ -1,5 +1,6 @@
 import boto3
-
+import _general as _G
+import os
 class DeleteAll:
     def __init__ (self):
         self.tipo=""
@@ -15,3 +16,28 @@ class DeleteAll:
         for obj in response['Contents']:
             s3_client.delete_object(Bucket=nombre_bucket, Key=obj['Key'])
         print('Todos los directorios y archivos han sido eliminados.')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def borrarServer(self):
+        for item in os.listdir('./archivos/'):
+            _G.deleteSever(item)
+        return 'todos los archivos y directorios han sido eliminados'

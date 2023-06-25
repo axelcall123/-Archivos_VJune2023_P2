@@ -30,8 +30,15 @@ def create():
         create.contenido=request.json['body']
         create.ruta=request.json['path']
         create.creacionBucket()
-     
-    return {"Creacion":"Archivo-Bucket"}
+        return {"Creacion": "Archivo-Bucket"}
+    elif(request.json['type']):
+        create.nombre = request.json['name']
+        create.contenido = request.json['body']
+        create.ruta = request.json['path']
+        create.creacionServer()
+        return {"Creacion": "Archivo-Server"}
+    return {"Creacion": "f"}
+    
 
 
 @app.route('/delete',methods = ['POST'])
@@ -41,7 +48,12 @@ def delete():
         delete.nombre=request.json['name']
         delete.ruta=request.json['path']
         delete.borrarBucket()
-    return {"Eliminacion":"Archivo-Bucket"}
+        return {"Eliminacion":"Archivo-Bucket"}
+    elif(request.json['type']):
+        delete.nombre = request.json['name']
+        delete.ruta = request.json['path']
+        return {"Eliminacion": delete.borrarServer()}
+    return {"Eliminacion":"f"}
 
 
 @app.route('/copy',methods = ['POST'])
@@ -52,9 +64,13 @@ def copy():
     if(request.json['type_from']=="bucket")and(request.json['type_to']=="bucket"):
         copy.copiarBucketToBucket()
         return {"copy":"Archivo-Bucket-Bucket"}
-    if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
+    elif(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
         copy.copiarServerToBucket()
         return {"copy":"Archivo-server-Bucket"}
+    elif(request.json['type_from']=="bucket")and(request.json['type_to']=="server"):
+        return {"copy": copy.copiarBucketToServer()}
+    elif(request.json['type_from']=="server")and(request.json['type_to']=="server"):
+        return {"copy": copy.copiarServerToServer()}
 
 @app.route('/transfer',methods = ['POST'])
 def trasfer():
@@ -64,9 +80,13 @@ def trasfer():
     if(request.json['type_from']=="bucket")and(request.json['type_to']=="bucket"):
         trasfer.trasferirBucketToBucket()
         return {"trasfer":"Archivo-Bucket-Bucket"}
-    if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
+    elif(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
         trasfer.trasferirServerToBucket()
         return {"trasfer":"Archivo-server-Bucket"}
+    elif(request.json['type_from']=="bucket")and(request.json['type_to']=="server"):
+        return {"trasfer": trasfer.trasferirBucketToServer()}
+    elif(request.json['type_from']=="server")and(request.json['type_to']=="server"):
+        return {"trasfer": trasfer.trasferirServerToServer()}
 
 @app.route('/rename',methods = ['POST'])
 def rename():
@@ -75,8 +95,11 @@ def rename():
         rename.ruta=request.json['path']
         rename.nombre=request.json['name']
         rename.renombrarBucket()
-    return {"rename":"Archivo-Bucke"}
-
+        return {"rename":"Archivo-Bucke"}
+    elif(request.json['type']=='server'):
+        rename.ruta = request.json['path']
+        rename.nombre = request.json['name']
+        return {"rename": rename.renombrarServer()}
 
 @app.route('/modify',methods = ['POST'])
 def modify():
@@ -85,14 +108,20 @@ def modify():
         modify.ruta=request.json['path']
         modify.contenido=request.json['body']
         modify.modificarBucket()
-    return {"modify":"Archivo-Bucke"}
+        return {"modify":"Archivo-Bucke"}
+    elif(request.json['type']=='server'):
+        modify.ruta = request.json['path']
+        modify.contenido = request.json['body']
+        return {"modify": modify.modificarServer()}
 
 @app.route('/delete_all',methods = ['POST'])
 def deleteAll():
     deleteAll=DeleteAll()
     if(request.json['type']=="bucket"):
         deleteAll.borrarBucket()
-    return {"borrar":"borror TODO-Bucket"}
+        return {"borrar":"borror TODO-Bucket"}
+    elif(request.json['type']=='server'):
+        return {"borrar": deleteAll.borrarServer()}
 
 @app.route('/backup',methods = ['POST'])
 def backUp():

@@ -1,4 +1,6 @@
 import boto3
+from varDef import *
+import os
 class Modify:
     def __init__ (self,):
         self.contenido=""
@@ -30,3 +32,25 @@ class Modify:
         contenido_modificado = self.contenido 
         s3_client.put_object(Body=contenido_modificado, Bucket=nombre_bucket, Key=nombre_archivo)
         print('Archivo modificado exitosamente.')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def modificarServer(self):
+        rs={"cuerpo":self.contenido,"ruta":self.ruta}
+        if os.path.exists(rutaSer+rs["ruta"]):
+            f = open(rutaSer+rs["ruta"], "w")
+            f.write(rs["cuerpo"])
+            f.close()
+            return 'archivo modificado'

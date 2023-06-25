@@ -1,6 +1,8 @@
 import boto3
 from pathlib import Path
-
+from varDef import *
+import _general as _G
+import os
 class Copy:
     def __init__ (self,):
         self.de=""
@@ -93,3 +95,52 @@ class Copy:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    def copiarServerToServer(self):
+        rs={"from":self.de,"to":self.a}
+        return _G.copySever(rutaSer+rs["to"], rutaSer+rs["from"])
+    
+    def copiarBucketToServer(self):
+        s3 = boto3.client('s3')
+        name='202001574'
+        rs={"from":self.de,"to":self.a}#FIXME cambiar a self.de y self.a
+        if not _G.existeBucket(s3, name, f'{rutaB}{rs["from"]}'):
+            return 'no existe ruta en el bucket'
+        if '.txt' in rs["from"]:  # copio solo un archivo
+            #                         ruta nombre                              nombre
+            rename = _G.creRenameL(os.path.join(
+                rutaSer, rs["to"]), rs['from'].split('/')[-1])
+            s3.download_file(name, f'{rutaB}{rs["from"]}', os.path.join(
+                rutaSer+rs["to"], rename))  # ubicacion boto,ubicacion local
+            return 'copio el archivo'
+        else:  # copio una carpeta
+            response = s3.list_objects_v2(
+                Bucket=name, Prefix=f'{rutaB}{rs["from"]}')  # obtiene todo el listado
+            for obj in response['Contents']:
+                print(obj['Key'])
+                if not obj['Key'].endswith('/'):  # solo files
+                    # obtengo la ruta del bucket sin el nombre
+                    relativePath = _G.listado(obj['Key'])
+                    # quito la parte de la ruta del bucket, que me causa problemas
+                    relativePath = relativePath.replace(
+                        f'{rutaB}{rs["from"]}', '')
+                    # agrego la ruta del server
+                    relativePath = os.path.join(rutaSer+rs["to"], relativePath)
+                    os.makedirs(relativePath, exist_ok=True)  # creo la carpeta
+                    rename = _G.creRenameL(
+                        relativePath, obj['Key'].split('/')[-1])  # renombro
+                    #                         ruta nombre                              nombre
+                    s3.download_file(name, obj["Key"], os.path.join(
+                        relativePath, rename))  # ubicacion boto,ubicacion local
+        return 'copio el folder'

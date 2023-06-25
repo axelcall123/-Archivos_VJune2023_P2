@@ -3,6 +3,8 @@ import sys
 import tempfile
 #from Aplicacion.variablesGlobales import temporalFile
 import boto3
+from varDef import *
+import _general as _G
 class Create:
     def __init__ (self,):
         self.nombre=""
@@ -44,3 +46,33 @@ class Create:
         print("conectado al buked")
         s3.Object("202001574", "archivos/"+self.ruta+self.nombre).put(Body=self.contenido)
         print("Archivo creado al bucket")
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    def creacionServer(self):
+        rs={"nombre":self.nombre,"contenido":self.contenido,"ruta":self.ruta}
+        os.makedirs(rutaSer+rs["ruta"], exist_ok=True)  # creo por si no existe
+        # renombro si existe
+        reName = _G.creRenameL(rutaSer+rs["ruta"], rs["nombre"])
+        f = open(rutaSer+rs["ruta"]+reName, "a+")  # abriendo y creando
+        f.write(f.read()+rs["contenido"])
+        f.close()  # siempre cerrar

@@ -1,6 +1,8 @@
 import os
 import tempfile
 import boto3
+from varDef import *
+import _general as _G
 #from Aplicacion.variablesGlobales import temporalFile
 class Delete:
     def __init__ (self,):
@@ -48,10 +50,16 @@ class Delete:
 
 
 
-        
-            
 
-        
-        
-    
 
+
+
+
+
+
+    def borrarServer(self):
+        rs={"nombre":self.nombre,"ruta":self.ruta}
+        ruta = rutaSer+rs["ruta"]
+        if "nombre" in rs:
+            ruta = ruta+rs["nombre"]
+        return _G.deleteSever(ruta)

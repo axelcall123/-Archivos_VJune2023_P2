@@ -1,4 +1,7 @@
 import boto3
+from varDef import *
+import _general as _G
+import os
 class Rename:
     def __init__ (self,):
         self.ruta=""
@@ -78,3 +81,21 @@ class Rename:
             return nuevoPath
 
 
+
+
+
+
+
+
+    def renombrarServer(self):
+        rs={"ruta":self.ruta,"nombre":self.nombre}
+        ruta = rutaSer+rs["ruta"]
+        nuevaRuta = _G.listado(ruta)
+        if os.path.exists(ruta):
+            if os.path.exists(nuevaRuta+rs["nombre"]):
+                return 'ya existe el archivo'
+            else:
+                os.rename(ruta, nuevaRuta+rs["nombre"])
+                return 'fuer renombrado'
+        else:
+            return 'no existe ruta'
