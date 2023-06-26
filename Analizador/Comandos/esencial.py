@@ -22,9 +22,9 @@ class Leer:
                                 elif (elementos2[0] == "-path->"):
                                     myobjCreate['path']=elementos2[1]
                                 elif (elementos2[0] == "-body->"):
-                                    myobjCreate['type']=elementos2[1]
+                                    myobjCreate['body']=elementos2[1]
                                 else:
-                                   myobjCreate['body']=elementos2[1]
+                                   myobjCreate['type']=elementos2[1]
                             #Enviando peticion Create
                             #Creando direccion (Cambiar url si se llega a cambiar la IP de la instacia)
                             comandoUrl = url+"/create"
