@@ -89,9 +89,12 @@ class MainWindow:
         file = filedialog.askopenfile(mode='r', filetypes=[('Python Files', '*')])
         if file:
             content = file.read()
-            #contenido de archivo subido
-            print(content)
             file.close()
+            #obtener el string
+            print(content)
+            #mandarlo a anlizar
+            grammarInput(content,self.analizar)
+
             
 
 

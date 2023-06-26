@@ -1,1 +1,3 @@
-open -type->bucket -name->archivo1.txt
+create -name->prueba1.txt -path->/carpeta2/ -body->"Este es el contenido del archivo 1" -type->bucket
+delete -path->/carpeta1/ -name->prueba1.txt -type->bucket
+Copy -from->/carpeta2/prueba1.txt -to->/carpeta1/ -type_to->bucket -type_from->bucket
