@@ -9,6 +9,7 @@ from Analizador.Comandos.modify import Modify
 from Analizador.Comandos.deleteAll import DeleteAll
 from Analizador.Comandos.backup import Backup
 from Analizador.Comandos.recovery import Recovery
+from Analizador.Comandos.open import Open
 
 
     
@@ -138,6 +139,15 @@ def recovery():
         recovery.name=request.json['name']
         recovery.recoveryBuckettoServer()
         return {"recovery":"Servidor to bucket"}
+    
+
+@app.route('/open',methods = ['POST'])
+def open():
+    open=Open()
+    if(request.json['type']=="bucket"):
+        open.name=request.json['name']
+        open.openBucket()
+        return {"open":" bucket file"}
 
 
 

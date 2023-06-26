@@ -1,3 +1,4 @@
+import boto3
 class Open:
     def __init__ (self):
         self.tipo=""
@@ -15,11 +16,15 @@ class Open:
         self.port=port
 
     def Name(self,name):
-        self.name=name
+        if('"' in name):
+            self.name=name.replace("\"", "" )
+        else:
+            self.name=name
 
     def openBucket(self):
-        print("openBucket")
-        print(self.tipo)
-        print(self.ip)
-        print(self.port)
-        print(self.name)
+        s3_client = boto3.client('s3')
+        nombre_bucket = '202001574'
+        ruta_archivo_s3 = 'archivos/'+self.name
+        response = s3_client.get_object(Bucket=nombre_bucket, Key=ruta_archivo_s3)
+        contenido = response['Body'].read().decode('utf-8')
+        print(contenido)
