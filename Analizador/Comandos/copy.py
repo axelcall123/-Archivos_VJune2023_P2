@@ -23,10 +23,16 @@ class Copy:
         else:
             self.a=a
     def typeTo(self,tipoDe):
-        self.tipoDe=tipoDe
+        if('"' in tipoDe):
+            self.tipoDe=tipoDe.replace("\"", "" )
+        else:
+            self.tipoDe=tipoDe
 
     def typeFrom(self,tipoA):
-        self.tipoA=tipoA
+        if('"' in tipoA):
+            self.tipoA=tipoA.replace("\"", "" )
+        else:
+            self.tipoA=tipoA
 
     def copiarBucketToBucket(self):
         #limpiando path

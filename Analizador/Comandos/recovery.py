@@ -9,10 +9,16 @@ class Recovery:
         self.name=""
 
     def typeTo(self,tipoDe):
-        self.tipoDe=tipoDe
+        if('"' in tipoDe):
+            self.tipoDe=tipoDe.replace("\"", "" )
+        else:
+            self.tipoDe=tipoDe
 
     def typeFrom(self,tipoA):
-        self.tipoA=tipoA
+        if('"' in tipoA):
+            self.tipoA=tipoA.replace("\"", "" )
+        else:
+            self.tipoA=tipoA
 
     def Ip(self,ip):
         self.ip=ip
@@ -21,7 +27,10 @@ class Recovery:
         self.port=port
 
     def Name(self,name):
-        self.name=name
+        if('"' in name):
+            self.name=name.replace("\"", "" )
+        else:
+            self.name=name
 
     def recoveryBuckettoServer(self):
         # Crea una instancia del cliente de Amazon S3
