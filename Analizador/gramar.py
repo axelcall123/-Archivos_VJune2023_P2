@@ -229,6 +229,12 @@ def gramarMain():
     #print(resultado)
     return resultado
 
-analizar= Leer()
-analizar.comando(gramarMain())
+#analizar= Leer()
+#analizar.comando(gramarMain())
 #gramarMain()
+
+def grammarInput(input,analizar):
+    parser = yacc.yacc()
+    resultado = parser.parse(input.lower())
+    analizar.comando(resultado)
+    

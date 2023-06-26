@@ -1,216 +1,208 @@
-
-from Analizador.Comandos.create import Create
-from Analizador.Comandos.delete import Delete
-from Analizador.Comandos.copy import Copy
-from Analizador.Comandos.transfer import Transfer
-from Analizador.Comandos.rename import Rename
-from Analizador.Comandos.modify import Modify
-from Analizador.Comandos.backup import Backup
-from Analizador.Comandos.recovery import Recovery
-from Analizador.Comandos.deleteAll import DeleteAll
-from Analizador.Comandos.open import Open
-
-
+import requests
+################################################################################
+url='http://3.15.29.9:3000'
 class Leer:
     def __init__(self,):
         pass
 
     def comando(self, arreglo):
         for element in arreglo:
-            # cuales comandos
             for comando in element:
-                # Separando comandos
-                if (comando == "create"):  # !Comando Create y self.self.local es True
-                    #self.local=False
-                    comandoCreate = Create()
+                if (comando == "create"):  # !Comando Create
+                    #creando objeto 
+                    myobjCreate = {'name': '',
+                             'body': '',
+                             'path': '',
+                             'type': ''}
                     for parametros in element:
                         if (parametros != "create"):
                             for elementos2 in parametros:
                                 if (elementos2[0] == "-name->"):
-                                    comandoCreate.name(elementos2[1])
+                                    myobjCreate['name']=elementos2[1]
                                 elif (elementos2[0] == "-path->"):
-                                    comandoCreate.path(elementos2[1])
+                                    myobjCreate['path']=elementos2[1]
                                 elif (elementos2[0] == "-body->"):
-                                    comandoCreate.body(elementos2[1])
+                                    myobjCreate['type']=elementos2[1]
                                 else:
-                                    comandoCreate.type(elementos2[1])
-                            #creando archivo
-                            if (comandoCreate.tipo == "bucket"):
-                                comandoCreate.creacionBucket()
-                            #else:
-                            #    comandoCreate.creacionServer()
+                                   myobjCreate['body']=elementos2[1]
+                            #Enviando peticion Create
+                            #Creando direccion (Cambiar url si se llega a cambiar la IP de la instacia)
+                            comandoUrl = url+"/create"
+                            # "x" tiene el return de la peticion enviada
+                            x = requests.post(comandoUrl, json = myobjCreate)
+                            #imprimiendo json
+                            print(myobjCreate)
+                            #imprimiendo return
+                            print(x)
                 if (comando == "delete"):  # !Comando delete
-                    #self.local=False 
-                    comandoDelete = Delete()
+                    myobjDelete = {'name': '',
+                                    'path': '',
+                                    'type': ''}
                     for parametros in element:
                         if (parametros != "delete"):
                             for elementos2 in parametros:
                                 if (elementos2[0] == "-path->"):
-                                    comandoDelete.path(elementos2[1])
+                                    myobjDelete['path']=elementos2[1]
                                 elif (elementos2[0] == "-name->"):
-                                    comandoDelete.name(elementos2[1])
+                                    myobjDelete['name']=elementos2[1]
                                 else:
-                                    comandoDelete.type(elementos2[1])
-                            #! Dependiento TYPE
-                            if (comandoDelete.tipo == "bucket"):
-                                comandoDelete.borrarBucket()
-                            #else:
-                            #    comandoDelete.borrarCloud()
+                                    myobjDelete['type']=elementos2[1]
+                            comandoUrl = url+"/delete"
+                            x = requests.post(comandoUrl, json = myobjDelete)
+                            print(myobjDelete)
+                            print(x)
                 if (comando == "copy"):  # !Comando copy
-                    #self.local=False
-                    comandoCopy = Copy()
+                    myobjCopy = {'from': '',
+                                'to': '',
+                                'type_to': '',
+                                'type_from': ''}
                     for parametros in element:
                         if (parametros != "copy"):
                             for elementos2 in parametros:
                                 if (elementos2[0] == "-from->"):
-                                    comandoCopy.desde(elementos2[1])
+                                    myobjCopy['from']=elementos2[1]
                                 elif (elementos2[0] == "-to->"):
-                                    comandoCopy.to(elementos2[1])
+                                    myobjCopy['to']=elementos2[1]
                                 elif (elementos2[0] == "-type_to->"):
-                                    comandoCopy.typeTo(elementos2[1])
+                                    myobjCopy['type_to']=elementos2[1]
                                 else:
-                                    comandoCopy.typeFrom(elementos2[1])
-
-                            #! Dependiento TYPE
-                            if (comandoCopy.tipoA=="bucket")&(comandoCopy.tipoDe=="bucket"):
-                                comandoCopy.copiarBucketToBucket()
-                            #elif (comandoCopy.tipoA=="server")&(comandoCopy.tipoDe=="server"):
-                                #comandoCopy.copiarServerToServer()
-                            #elif (comandoCopy.tipoA=="bucket")&(comandoCopy.tipoDe=="server"):
-                                #comandoCopy.copiarBuckettoServer()
-                            #else:
-                                #comandoCopy.copiarServerToBucket()
+                                    myobjCopy['type_from']=elementos2[1]
+                            comandoUrl = url+"/copy"
+                            x = requests.post(comandoUrl, json = myobjCopy)
+                            print(myobjCopy)
+                            print(x)
                 if (comando == "transfer"):  # !Comando trasnfer
-                    #self.local=False
-                    comandoTransfer = Transfer()
+                    myobjTransfer = {'from': '',
+                                'to': '',
+                                'type_to': '',
+                                'type_from': ''}
                     for parametros in element:
                         if (parametros != "transfer"):
                             for elementos2 in parametros:
                                 if (elementos2[0] == "-from->"):
-                                    comandoTransfer.desde(elementos2[1])
+                                    myobjTransfer['from']=elementos2[1]
                                 elif (elementos2[0] == "-to->"):
-                                    comandoTransfer.to(elementos2[1])
+                                    myobjTransfer['to']=elementos2[1]
                                 elif (elementos2[0] == "-type_to->"):
-                                    comandoTransfer.typeTo(elementos2[1])
+                                    myobjTransfer['type_to']=elementos2[1]
                                 else:
-                                    comandoTransfer.typeFrom(elementos2[1])
-                            #! Dependiento del TYPE
-                            if (comandoTransfer.tipoA=="bucket")&(comandoTransfer.tipoDe=="bucket"):
-                                comandoTransfer.trasferirBucketToBucket()
-                            #elif (comandoTransfer.tipoA=="server")&(comandoTransfer.tipoDe=="server"):
-                                #comandoTransfer.copiarServerToServer()
-                            #elif (comandoTransfer.tipoA=="bucket")&(comandoTransfer.tipoDe=="server"):
-                                #comandoTransfer.copiarBuckettoServer()
-                            #else:
-                                #comandoTransfer.copiarServerToBucket()
+                                    myobjTransfer['type_from']=elementos2[1]
+                            comandoUrl = url+"/transfer"
+                            x = requests.post(comandoUrl, json = myobjTransfer)
+                            print(myobjTransfer)
+                            print(x)
                 if (comando == "rename"):  # !Comando rename
-                    #self.local=False
-                    comandoRenombrar = Rename()
+                    myobjRename = {'path': '',
+                                'name': '',
+                                'type': ''}
                     for parametros in element:
                         if (parametros != "rename"):
                             for elementos2 in parametros:
                                 if (elementos2[0] == "-path->"):
-                                    comandoRenombrar.path(elementos2[1])
+                                    myobjRename['path']=elementos2[1]
                                 elif (elementos2[0] == "-name->"):
-                                    comandoRenombrar.name(elementos2[1])
+                                    myobjRename['name']=elementos2[1]
                                 else:
-                                    comandoRenombrar.type(elementos2[1])
-                            #! Dependiento del type
-                            if (comandoRenombrar.tipo == "bucket"):
-                                comandoRenombrar.renombrarBucket()
-                            #else:
-                            #    comandoRenombrar.renombrarserver()
-
+                                    myobjRename['type']=elementos2[1]
+                            comandoUrl = url+"/rename"
+                            x = requests.post(comandoUrl, json = myobjRename)
+                            print(myobjRename)
+                            print(x)
                 if (comando == "modify"):  # !Comando modify
-                    #self.local=False
-                    comandoModificar = Modify()
+                    myobjModify = {'path': '',
+                                'body': '',
+                                'type': ''}
                     for parametros in element:
                         if (parametros != "modify"):
                             for elementos2 in parametros:
                                 if (elementos2[0] == "-path->"):
-                                    comandoModificar.path(elementos2[1])
+                                    myobjModify['path']=elementos2[1]
                                 elif (elementos2[0] == "-body->"):
-                                    comandoModificar.body(elementos2[1])
+                                    myobjModify['body']=elementos2[1]
                                 else:
-                                    comandoModificar.type(elementos2[1])
-                            #! Dependiento del configure
-                            if (comandoModificar.tipo == "bucket"):
-                                comandoModificar.modificarBucket()
-                            #else:
-                            #    comandoModificar.renombrarserver()
+                                    myobjModify['type']=elementos2[1]
+                            comandoUrl = url+"/modify"
+                            x = requests.post(comandoUrl, json = myobjModify)
+                            print(myobjModify)
+                            print(x)
                 if (comando == "backup"):  # !Comando backup
-                    #self.local=False
-                    comandoBackup= Backup()
+                    myobjBackup = {'type_to': '',
+                                'type_from': '',
+                                'ip': '',
+                                'name': '',
+                                'port': ''}
                     for parametros in element:
                         if (parametros != "backup"):
                             for elementos2 in parametros:
                                 if (elementos2[0] == "-type_to->"):
-                                    comandoBackup.typeTo(elementos2[1])
+                                    myobjBackup['type_to']=elementos2[1]
                                 elif (elementos2[0] == "-type_from->"):
-                                    comandoBackup.typeFrom(elementos2[1])
+                                    myobjBackup['type_from']=elementos2[1]
                                 elif(elementos2[0] == "-ip->"):
-                                    comandoBackup.Ip(elementos2[1])
+                                    myobjBackup['ip']=elementos2[1]
                                 elif(elementos2[0] == "-port->"):
-                                    comandoBackup.Port(elementos2[1])
+                                    myobjBackup['port']=elementos2[1]
                                 else:
-                                    comandoBackup.Name(elementos2[1])
-                            #! Dependiento del configure
-                            if (comandoBackup.tipoA == "bucket")&(comandoBackup.tipoDe == "server")&(comandoBackup.ip==comandoBackup.port): #copia de seguridad bucket to server propios
-                                comandoBackup.backupBuckettoServer()
-                            #else:
-                            #    comandoBackup.backupBuckettoBucket()
-
-
+                                    myobjBackup['name']=elementos2[1]
+                            comandoUrl = url+"/backup"
+                            x = requests.post(comandoUrl, json = myobjBackup)
+                            print(myobjModify)
+                            print(x)
                 if (comando == "recovery"):  # !Comando add
-                    #self.local=False
-                    comandoRecovery = Recovery()
+                    myobjRecovery = {'type_to': '',
+                                'type_from': '',
+                                'ip': '',
+                                'name': '',
+                                'port': ''}
                     for parametros in element:
                         if (parametros != "recovery"):
                             for elementos2 in parametros:
                                 if (elementos2[0] == "-type_to->"):
-                                    comandoRecovery.typeTo(elementos2[1])
+                                    myobjRecovery['type_to']=elementos2[1]
                                 elif (elementos2[0] == "-type_from->"):
-                                    comandoRecovery.typeFrom(elementos2[1])
+                                   myobjRecovery['type_from']=elementos2[1]
                                 elif(elementos2[0] == "-ip->"):
-                                    comandoRecovery.Ip(elementos2[1])
+                                    myobjRecovery['ip']=elementos2[1]
                                 elif(elementos2[0] == "-port->"):
-                                    comandoRecovery.Port(elementos2[1])
+                                    myobjRecovery['port']=elementos2[1]
                                 else:
-                                    comandoRecovery.Name(elementos2[1])
-                            #recovery
-                            if (comandoRecovery.tipoA == "bucket")&(comandoRecovery.tipoDe == "server")&(comandoRecovery.ip==comandoRecovery.port): #recovey de seguridad bucket to server propios
-                                comandoRecovery.recoveryBuckettoServer()
-                            #else:
-                            #    comandoAgregar.agregarCloud()
+                                    myobjRecovery['name']=elementos2[1]
+                            comandoUrl = url+"/recovery"
+                            x = requests.post(comandoUrl, json = myobjRecovery)
+                            print(myobjRecovery)
+                            print(x)
                 if (comando == "delete_all"):  # !Comando exec
-                    #self.local=False
-                    comandoBorrarTodo = DeleteAll()
+                    myobjDelete_all = {'type': ''}
                     for parametros in element:
                         if (parametros != "delete_all"):
                             for elementos2 in parametros:
                                 if (elementos2[0] == "-type->"):
-                                    comandoBorrarTodo.type(elementos2[1])
-                            if (comandoBorrarTodo.tipo == "bucket"):
-                                comandoBorrarTodo.borrarBucket()
-                            #else:
-                            #    comandoBorrarTodo.borrarServer()
+                                    myobjDelete_all['type']=elementos2[1]
+                            comandoUrl = url+"/delete_all"
+                            x = requests.post(comandoUrl, json = myobjDelete_all)
+                            print(myobjDelete_all)
+                            print(x)
                 if (comando == "open"):  # !Comando Open
                     #self.local=False
-                    comandoOpen= Open()
+                    myobjOpen = {'ip': '',
+                                'port': '',
+                                'name': '',
+                                'type': ''}
                     for parametros in element:
                         if (parametros != "open"):
                             for elementos2 in parametros:
                                 if (elementos2[0] == "-type->"):
-                                    comandoOpen.type(elementos2[1])
+                                    myobjOpen['type']=elementos2[1]
                                 elif(elementos2[0] == "-ip->"):
-                                    comandoOpen.Ip(elementos2[1])
+                                    myobjOpen['ip']=elementos2[1]
                                 elif(elementos2[0] == "-port->"):
-                                    comandoOpen.Port(elementos2[1])
+                                    myobjOpen['port']=elementos2[1]
                                 else:
-                                    comandoOpen.Name(elementos2[1])
-                            #! Dependiento del configure
-                            if (comandoOpen.tipo == "bucket")&(comandoOpen.ip==comandoOpen.port): #Open bucket  propio
-                                comandoOpen.openBucket()
-                            #else:
-                            #    comandoBackup.backupBuckettoBucket()
+                                    myobjOpen['name']=elementos2[1]
+                            comandoUrl = url+"/open"
+                            x = requests.post(comandoUrl, json = myobjOpen)
+                            print(myobjOpen)
+                            print(x)
+
+
                       
