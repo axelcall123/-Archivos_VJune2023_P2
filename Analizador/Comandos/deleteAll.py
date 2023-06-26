@@ -1,5 +1,5 @@
 import boto3
-import _general as _G
+import Analizador.Comandos._general as _G
 import os
 class DeleteAll:
     def __init__ (self):

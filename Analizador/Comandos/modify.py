@@ -1,5 +1,5 @@
 import boto3
-from varDef import *
+from Analizador.Comandos.varDef import *
 import os
 class Modify:
     def __init__ (self,):

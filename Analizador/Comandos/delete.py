@@ -1,8 +1,8 @@
 import os
 import tempfile
 import boto3
-from varDef import *
-import _general as _G
+from Analizador.Comandos.varDef import *
+import Analizador.Comandos._general as _G
 #from Aplicacion.variablesGlobales import temporalFile
 class Delete:
     def __init__ (self,):

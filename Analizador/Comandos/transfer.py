@@ -2,8 +2,8 @@ import boto3
 from pathlib import Path
 import os
 import shutil
-from varDef import *
-import _general as _G
+from Analizador.Comandos.varDef import *
+import Analizador.Comandos._general as _G
 class Transfer:
     def __init__ (self,):
         self.de=""

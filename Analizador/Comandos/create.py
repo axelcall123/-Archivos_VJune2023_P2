@@ -3,8 +3,8 @@ import sys
 import tempfile
 #from Aplicacion.variablesGlobales import temporalFile
 import boto3
-from varDef import *
-import _general as _G
+from Analizador.Comandos.varDef import *
+import Analizador.Comandos._general as _G
 class Create:
     def __init__ (self,):
         self.nombre=""

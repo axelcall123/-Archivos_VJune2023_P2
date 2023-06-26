@@ -1,6 +1,6 @@
 import boto3
-from varDef import *
-import _general as _G
+from Analizador.Comandos.varDef import *
+import Analizador.Comandos._general as _G
 import os
 class Rename:
     def __init__ (self,):
