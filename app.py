@@ -248,6 +248,9 @@ def responseT():
 @app.route('/open',methods = ['POST'])
 def openS():
     opeN=Open()
+    if (request.json['ip'] != '') and (request.json['port'] != ''):  # sent
+        array=opeN.openRecive()
+        return {"open":f'nombre:{array[0],"contenido":array[1]}'}
     if(request.json['type']=="bucket"):
         opeN.name=request.json['name']
         return {"openB":opeN.openBucket()}

@@ -2,6 +2,7 @@ import boto3
 from Analizador.Comandos.varDef import *
 import Analizador.Comandos._general as _G
 import os
+import requests
 class Open:
     def __init__ (self):
         self.tipo=""
@@ -48,6 +49,10 @@ class Open:
             return 'No existe el archivo, o es un fodler'
         
     
+
+
+
+    
     def openSend(self):
         if self.tipo=="server":
             if "/" in self.name:
@@ -68,3 +73,10 @@ class Open:
                 Bucket=nombre_bucket, Key=ruta_archivo_s3)
             contenido = response['Body'].read().decode('utf-8')
             return contenido
+
+    def openRecive(self):
+        res = requests.get(
+            url=f"http://{self.ip}:{self.port}/backupg",  # URL METODO
+            json={"type": self.tipo, "name": self.name}  # LO QUE ENVIO
+        )
+        return [res["name"],res["contenido"]]
