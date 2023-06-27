@@ -1,5 +1,5 @@
-import ply.lex as lex
-import ply.yacc as yacc
+import Analizador.ply.lex as lex
+import Analizador.ply.yacc as yacc
 import re
 from Analizador.Comandos.esencial import Leer
 
