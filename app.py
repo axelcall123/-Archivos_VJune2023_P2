@@ -242,6 +242,9 @@ def open():
     if(request.json['type']=="bucket"):
         open.name=request.json['name']
         return {"open":open.openBucket()}
+    elif(request.json['type']=="server"):
+        open.name=request.json['name']
+        return {"open":open.openServer()}
 
 
 

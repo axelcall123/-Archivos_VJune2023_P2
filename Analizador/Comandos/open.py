@@ -1,4 +1,7 @@
 import boto3
+from Analizador.Comandos.varDef import *
+import Analizador.Comandos._general as _G
+import os
 class Open:
     def __init__ (self):
         self.tipo=""
@@ -30,3 +33,12 @@ class Open:
         response = s3_client.get_object(Bucket=nombre_bucket, Key=ruta_archivo_s3)
         contenido = response['Body'].read().decode('utf-8')
         return contenido
+    
+
+
+    def openServer(self):
+        ruta=os.path.join(rutaSer,self.name)
+        if os.path.exists(ruta) and '.txt' in self.Name:
+            return _G.readTxt(ruta)
+        else:
+            return 'No existe el archivo, o es un fodler'
