@@ -15,7 +15,10 @@ class DeleteAll:
         nombre_bucket = '202001574'
         response = s3_client.list_objects_v2(Bucket=nombre_bucket)
         for obj in response['Contents']:
-            s3_client.delete_object(Bucket=nombre_bucket, Key=obj['Key'])
+            if obj['Key'] == 'miausuarios.txt':
+                continue
+            print(obj['Key'])
+            #s3_client.delete_object(Bucket=nombre_bucket, Key=obj['Key'])
         print('Todos los directorios y archivos han sido eliminados.')
 
 
