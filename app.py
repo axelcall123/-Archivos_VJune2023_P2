@@ -127,7 +127,7 @@ def deleteAll():
 @app.route('/backupN', methods=['POST'])  # buckup solo nuestro
 def backUpN():
     backup = Backup()
-    if ("ip" in request.json) and ("port" in request.json):  # sent
+    if (request.json['ip'] != '') and (request.json['port'] != ''):  # sent
         backup.ip = request.json['ip']
         backup.port = request.json['port']
         backup.name = request.json['name']
@@ -135,12 +135,12 @@ def backUpN():
         backup.tipoDe = request.json['type_from']
         if (request.json['type_to'] == "server"):  # envio a su server
             #listado de todo el server
-            backup.backupSend()
-            return {"backUpS": "envio al otro servidor"}  # envio a su bukcet
+            # backup.backupSend()  # FIXME:HERE
+            return {"backUpS": backup.backupSend()}  # envio a su bukcet
         elif (request.json['type_to'] == "bucket"):
             #listado de todo el bucket
-            backup.backupSend()
-            return {"backUpB": "envio al otro servidor"}
+            # backup.backupSend()  # FIXME:HERE
+            return {"backUpB": backup.backupSend()}
     elif (request.json['type_from'] == "server") and (request.json['type_to'] == "bucket"):  # ready
         backup.name = request.json['name']
         backup.backupservertobucket()
@@ -162,18 +162,19 @@ def backUpN():
 @app.route('/recoveryN', methods=['POST'])  # buckup solo nuestro
 def recoveryN():
     recovery = Recovery()
-    if ("ip" in request.json) and ("port" in request.json):  # sent
+    if (request.json['ip'] != '') and (request.json['port'] != ''):  # sent
         recovery.ip = request.json['ip']
         recovery.port = request.json['port']
         recovery.name = request.json['name']
         recovery.tipoA = request.json['type_to']
         recovery.tipoDe = request.json['type_from']
+        # recovery.archivos=request.json['archivos'] #only tests FIXME:cambiar depues del test
         if (request.json['type_from'] == "server"):  # viene de server
             recovery.recoveryReceive()
-            return {"recoveryS": "envio al otro servidor"}  # viene de bucket
+            return {"recoveryS": "se recuperaron los archivos existentes"}  # viene de bucket
         elif (request.json['type_from'] == "bucket"):
             recovery.recoveryReceive()
-            return {"recoveryB": "envio al otro servidor"}
+            return {"recoveryB": "se recuperaron los archivos existentes"}
     elif (request.json['type_from'] == "bucket") and (request.json['type_to'] == "server"):  # ready
         recovery.name = request.json['name']
         recovery.recoveryBuckettoServer()
@@ -218,16 +219,24 @@ def recoveryO():
         recovery.name = request.json['name']
         recovery.tipoA = request.json['type_to']
         recovery.tipoDe = request.json['type_from']
-        recovery.archivos = request.json['archivos']
-        recovery.recoverySend()
-        return {"backUp": "Servidor to bucket"}
+        return jsonify({
+                        "type_to": request.json["type_to"]
+                        , "type_from": request.json['type_from']
+                        , "name": request.json['name']
+                        , "archivos": recovery.recoverySend()
+                        })
+        # return {"backUp": "Servidor to bucket"}
     elif request.json['type_from'] == "bucket":
         recovery.name = request.json['name']
         recovery.tipoA = request.json['type_to']
         recovery.tipoDe = request.json['type_from']
-        recovery.archivos = request.json['archivos']
-        recovery.recoverySend()
-        return {"backUp": "Servidor to bucket"}
+        return jsonify({
+            "type_to": request.json["type_to"]
+            , "type_from": request.json['type_from']
+            , "name": request.json['name']
+            , "archivos": recovery.recoverySend()
+        })
+        # return {"backUp": "Servidor to bucket"}
 
 
 @app.route('/respuestaT', methods=['POST'])
@@ -237,15 +246,27 @@ def responseT():
     
 
 @app.route('/open',methods = ['POST'])
-def open():
-    open=Open()
+def openS():
+    opeN=Open()
     if(request.json['type']=="bucket"):
-        open.name=request.json['name']
-        return {"open":open.openBucket()}
+        opeN.name=request.json['name']
+        return {"openB":opeN.openBucket()}
     elif(request.json['type']=="server"):
-        open.name=request.json['name']
-        return {"open":open.openServer()}
+        opeN.name=request.json['name']
+        return {"openS":opeN.openServer()}
 
+
+@app.route('/openO', methods=['POST'])
+def openO():
+    opeN = Open()
+    if (request.json['type'] == "bucket"):
+        opeN.tipo = request.json['type']
+        opeN.name = request.json['name']
+        return {"name":request.json['name'],"contenido": opeN.openSend()}
+    elif (request.json['type'] == "server"):
+        opeN.tipo = request.json['type']
+        opeN.name = request.json['name']
+        return {"name": request.json['name'], "contenido": opeN.openSend()}
 
 
 if __name__== "__main__":

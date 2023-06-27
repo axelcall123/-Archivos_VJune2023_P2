@@ -4,6 +4,7 @@ from Analizador.Comandos.copy import Copy
 import Analizador.Comandos._general as _G
 from Analizador.Comandos.varDef import *
 import requests
+import json
 class Recovery:
     def __init__ (self):
         self.tipoA=""
@@ -11,6 +12,7 @@ class Recovery:
         self.ip=""
         self.port=""
         self.name=""
+        self.archivos={}#FIXME:only test
 
     def typeTo(self,tipoDe):
         if('"' in tipoDe):
@@ -83,29 +85,30 @@ class Recovery:
         copy.copyservetobucket()
         print()
 
-    def recoveryReceive(self):
+    def recoveryReceive(self):# here<--------------------
         if self.tipoDe == "server":
-            _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA)
+            res = requests.get(
+                url=f"http://{self.ip}:{self.port}/backupg",  #URL METODO
+                json={"type_to": self.tipoA, "tyep_from": self.tipoDe,
+                      "name": self.name, "archivos": self.archivos}  #LO QUE ENVIO
+            )
+            # _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA,self.name) #only tests FIXME:cambiar depues del test
+            #{rutaSer}/{self.name} | {rutaSer}
+            _G.recorrerJsonServer(f'{rutaSer}/{self.name}',res["archivos"],self.tipoA,self.name) #original
+            return res.text
         elif self.tipoDe == "bucket":
-            _G.recorrerJsonBucket(
-                f'{rutaSer}/{self.name}/', self.archivos, self.tipoA)
-            
+            res = requests.get(
+                url=f"http://{self.ip}:{self.port}/backupg",  # URL METODO
+                json={"type_to": self.tipoA, "tyep_from": self.tipoDe,
+                      "name": self.name, "archivos": self.archivos}  # LO QUE ENVIO
+            )
+            # _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name) #only tests
+            _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name) #original
+            return res.text
     def recoverySend(self):
-        if self.tipoDe == "server":  # recorre en modo server
-            res = _G.listadoJsonServer(rutaSer)
-            print("json:", res)
-            res = requests.get(
-                url=f"http://{self.ip}:{self.port}/respuestaT",  # URL METODO
-                json={"type_to": self.tipoA, "tyep_from": self.tipoDe, "name": self.name,
-                      "archivos": _G.listadoJsonServer(rutaSer)}  # LO QUE ENVIO
-            )
-            print(res.text)
-        elif self.tipoDe == "bucket":  # recorro en modo bucket
-            res = _G.listadoJsonBucket('/')
-            print("json:", res)
-            res = requests.get(
-                url=f"http://{self.ip}:{self.port}/respuestaT",  # URL METODO
-                json={"type_to": self.tipoA, "tyep_from": self.tipoDe, "name": self.name,
-                      "archivos": _G.listadoJsonBucket('/')}  # LO QUE ENVIO
-            )
-            print(res.text)
+        if self.tipoDe == "server":  
+            res = _G.listadoJsonServer(rutaSer+'/'+self.name)
+            return json.loads("{"+res+"}")
+        elif self.tipoDe == "bucket":  
+            res = _G.listadoJsonBucket(f'{self.name}/')
+            return json.loads("{"+res+"}")

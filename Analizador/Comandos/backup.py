@@ -13,6 +13,7 @@ class Backup:
         self.ip=""
         self.port=""
         self.name=""
+        self.archivos = {}  # FIXME:only test
 
     def typeTo(self,tipoDe):
         if('"' in tipoDe):
@@ -80,27 +81,28 @@ class Backup:
 
     def backupSend(self):
         if self.tipoDe=="server":#recorre en modo server
-            res = _G.listadoJsonServer(rutaSer)
-            print("json:",res)
+            resT = _G.listadoJsonServer(rutaSer)
             res = requests.get(
-                url=f"http://{self.ip}:{self.port}/respuestaT",  # URL METODO
-                json={"type_to": self.tipoA, "tyep_from": self.tipoDe, "name": self.name,
-                      "archivos": _G.listadoJsonServer(rutaSer)}  # LO QUE ENVIO
-            )
-            print(res.text)
+                url=f"http://{self.ip}:{self.port}/backupg",  # URL METODO
+                json={"type_to": self.tipoA
+                      , "tyep_from": self.tipoDe
+                      , "name": self.name
+                      ,"archivos": "{"+resT+"}"}  # LO QUE ENVIO
+                 )
+            return res.text
         elif self.tipoDe=="bucket":#recorro en modo bucket
-            res = _G.listadoJsonBucket('/')
-            print("json:", res)
+            resT = _G.listadoJsonBucket(f'{rutaB}/')
             res = requests.get(
-                url=f"http://{self.ip}:{self.port}/respuestaT",  # URL METODO
-                json={"type_to": self.tipoA, "tyep_from": self.tipoDe, "name": self.name,
-                      "archivos": _G.listadoJsonBucket('/')}  # LO QUE ENVIO
-            )
-            print(res.text)
+                url=f"http://{self.ip}:{self.port}/backupg",# URL METODO
+                json={"type_to": self.tipoA
+                      , "tyep_from": self.tipoDe
+                      , "name": self.name
+                      ,"archivos": "{"+resT+"}"}  # LO QUE ENVIO
+                )
+            return res.text
         
     def backupReceive(self):#FIXME: falta la opcion 
         if self.tipoDe=="server":
-            _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA)
+            _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA,self.name)
         elif self.tipoDe == "bucket":
-            _G.recorrerJsonBucket(
-                f'{rutaSer}/{self.name}/', self.archivos, self.tipoA)
+            _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name)

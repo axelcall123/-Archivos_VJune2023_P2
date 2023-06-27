@@ -116,20 +116,20 @@ def listadoJsonServer(url) -> json:  # posicion es para saber si es el primero, 
 def listadoJsonBucket(pathOrigen) -> json:
     s3 = boto3.client('s3')
     name = '202001574'
-    response = s3.list_objects_v2(Bucket=name, Prefix=f'{rutaB}{pathOrigen}')
+    response = s3.list_objects_v2(Bucket=name, Prefix=pathOrigen)
     jsonTxt=''
-    contenido=0
+    conteo=0
     for obj in response['Contents']:
         contenido=''
         if not obj['Key'].endswith('/'):  # solo files
             respuesta = s3.get_object(Bucket=name, Key=obj['Key'])
             contenido = respuesta['Body'].read().decode('utf-8')  # contenido
             #             ruta          carpetas,array           ,     nombre
-            if contenido==0:
-                jsonTxt += '"'+obj["Key"]+":"+contenido+'"'
+            if conteo==0:
+                jsonTxt += '"'+obj["Key"]+'":"'+contenido+'"'
             else:
-                jsonTxt += ',"'+obj["Key"]+":"+contenido+'"'
-        contenido+=1
+                jsonTxt += ',"'+obj["Key"]+'":"'+contenido+'"'
+            conteo+=1
     return jsonTxt
 
 
@@ -152,7 +152,7 @@ def existeBucket(s3, name, f_key):
         return False
 
 
-def recorrerJsonServer(ruta, aJson,tipo):#FIXME:testear
+def recorrerJsonServer(ruta, aJson,tipo,nombre):#FIXME:testear
     for aA in aJson:  # NORMAL
         if '.txt' in aA:  # txt
             if tipo=="server":
@@ -160,18 +160,18 @@ def recorrerJsonServer(ruta, aJson,tipo):#FIXME:testear
             elif tipo=="bucket":
                 print(ruta, '>>', aA, '<>', aJson[aA])
         else:  # folder
-            if tipo == "server":
+            if tipo == "server":#esta dentro asi que
                 os.makedirs(f'{ruta}/{aA}', exist_ok=True)  # creo por si no existe
-                recorrerJsonServer(f'{ruta}/{aA}', aJson[aA],tipo)
+                recorrerJsonServer(f'{ruta}/{aA}', aJson[aA],tipo,nombre)
 
 
-def recorrerJsonBucket(ruta,aJson,tipo):
+def recorrerJsonBucket(ruta,aJson,tipo,nombre):
     for aA in aJson:  # NORMAL
         if '.txt' in aA:  # txt
             if tipo=="server":
                 urlSintxt = listado(aA)  # obtengo url sin el txt
                 urlSintxt = urlSintxt.replace(aA.split('/')[0]+'/','') # obteno nombre archivos/.../nombre.txt> .../nombre.txt
-                createSever(aA.split('/')[-1], aJson[aA], ruta+urlSintxt)
+                createSever(aA.split('/')[-1], aJson[aA], ruta+nombre+"/"+urlSintxt)
             elif tipo=="bucket":
                 print(aA, '<>', aJson[aA])
 
