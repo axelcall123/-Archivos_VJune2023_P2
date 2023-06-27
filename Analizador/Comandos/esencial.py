@@ -1,6 +1,7 @@
 import requests
 ################################################################################
 url='http://3.15.29.9:3000'
+import Analizador.Comandos._general as _G
 class Leer:
     def __init__(self,):
         pass
@@ -33,7 +34,7 @@ class Leer:
                             #imprimiendo json
                             print(myobjCreate)
                             #imprimiendo return
-                            print(x)
+                            _G.getTJson(x)
                 if (comando == "delete"):  # !Comando delete
                     myobjDelete = {'name': '',
                                     'path': '',
@@ -50,7 +51,7 @@ class Leer:
                             comandoUrl = url+"/delete"
                             x = requests.post(comandoUrl, json = myobjDelete)
                             print(myobjDelete)
-                            print(x)
+                            _G.getTJson(x)
                 if (comando == "copy"):  # !Comando copy
                     myobjCopy = {'from': '',
                                 'to': '',
@@ -70,7 +71,7 @@ class Leer:
                             comandoUrl = url+"/copy"
                             x = requests.post(comandoUrl, json = myobjCopy)
                             print(myobjCopy)
-                            print(x)
+                            _G.getTJson(x)
                 if (comando == "transfer"):  # !Comando trasnfer
                     myobjTransfer = {'from': '',
                                 'to': '',
@@ -90,7 +91,7 @@ class Leer:
                             comandoUrl = url+"/transfer"
                             x = requests.post(comandoUrl, json = myobjTransfer)
                             print(myobjTransfer)
-                            print(x)
+                            _G.getTJson(x)
                 if (comando == "rename"):  # !Comando rename
                     myobjRename = {'path': '',
                                 'name': '',
@@ -107,7 +108,7 @@ class Leer:
                             comandoUrl = url+"/rename"
                             x = requests.post(comandoUrl, json = myobjRename)
                             print(myobjRename)
-                            print(x)
+                            _G.getTJson(x)
                 if (comando == "modify"):  # !Comando modify
                     myobjModify = {'path': '',
                                 'body': '',
@@ -124,7 +125,7 @@ class Leer:
                             comandoUrl = url+"/modify"
                             x = requests.post(comandoUrl, json = myobjModify)
                             print(myobjModify)
-                            print(x)
+                            _G.getTJson(x)
                 if (comando == "backup"):  # !Comando backup
                     myobjBackup = {'type_to': '',
                                 'type_from': '',
@@ -144,10 +145,10 @@ class Leer:
                                     myobjBackup['port']=elementos2[1]
                                 else:
                                     myobjBackup['name']=elementos2[1]
-                            comandoUrl = url+"/backup"
+                            comandoUrl = url+"/backupN"
                             x = requests.post(comandoUrl, json = myobjBackup)
                             print(myobjModify)
-                            print(x)
+                            _G.getTJson(x)
                 if (comando == "recovery"):  # !Comando add
                     myobjRecovery = {'type_to': '',
                                 'type_from': '',
@@ -167,10 +168,10 @@ class Leer:
                                     myobjRecovery['port']=elementos2[1]
                                 else:
                                     myobjRecovery['name']=elementos2[1]
-                            comandoUrl = url+"/recovery"
+                            comandoUrl = url+"/recoveryN"
                             x = requests.post(comandoUrl, json = myobjRecovery)
                             print(myobjRecovery)
-                            print(x)
+                            _G.getTJson(x)
                 if (comando == "delete_all"):  # !Comando exec
                     myobjDelete_all = {'type': ''}
                     for parametros in element:
@@ -181,7 +182,7 @@ class Leer:
                             comandoUrl = url+"/delete_all"
                             x = requests.post(comandoUrl, json = myobjDelete_all)
                             print(myobjDelete_all)
-                            print(x)
+                            _G.getTJson(x)
                 if (comando == "open"):  # !Comando Open
                     #self.local=False
                     myobjOpen = {'ip': '',
@@ -202,7 +203,7 @@ class Leer:
                             comandoUrl = url+"/open"
                             x = requests.post(comandoUrl, json = myobjOpen)
                             print(myobjOpen)
-                            print(x)
+                            _G.getTJson(x)
 
 
                       

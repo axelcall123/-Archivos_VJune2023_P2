@@ -4,7 +4,7 @@ from tkinter import messagebox as MessageBox
 from tkinter import *
 from tkinter import ttk, filedialog
 from tkinter.filedialog import askopenfile
-
+import Analizador.Comandos._general as _G
 from Analizador.gramar import grammarInput
 from Analizador.Comandos.esencial import Leer
 
@@ -17,6 +17,7 @@ class MainWindow:
         #setting title
         self.root.title("Consola")
         self.analizar=Leer()
+        _G.getTxt('!')#elmina el texto
         #setting window size
         width=1000
         height=800
@@ -56,7 +57,13 @@ class MainWindow:
         self.outputConsole["font"] = ft
         self.outputConsole["fg"] = "#333333"
         self.outputConsole.place(x=50,y=470,width=720,height=300)
-
+        # self.outputConsole.configure(state='disabled')
+        #scroll bar
+        scrollbar = tk.Scrollbar(root)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        #get scrollbar
+        self.outputConsole.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=self.outputConsole.yview)
 
         bttnEjecComando=tk.Button(self.root)
         bttnEjecComando["bg"] = "#1e90ff"
@@ -84,6 +91,11 @@ class MainWindow:
     def bttnEjecComando_command(self):
         stringInput=self.inputConsole.get("1.0", "end-1c")
         grammarInput(stringInput,self.analizar)
+        text += self.outputConsole.get("1.0", "end-1c")+"\n"
+        text += _G.getTxt('$')#retorna el texto
+        self.inputConsole.delete("1.0", tk.END)
+        self.outputConsole.delete("1.0", tk.END)
+        self.outputConsole.insert(tk.END, text)
 
     def bttnEjecFile_command(self):
         file = filedialog.askopenfile(mode='r', filetypes=[('Python Files', '*')])
@@ -94,9 +106,6 @@ class MainWindow:
             print(content)
             #mandarlo a anlizar
             grammarInput(content,self.analizar)
-
-            
-
 
 
 
