@@ -88,18 +88,18 @@ class Login:
 
 
     def GButton_691_command(self):
-        self.root.destroy()
-        self.test()
-        self.login()
+        #self.root.destroy()
+        #self.test()
+        #self.login()
         if((self.inputUserName.get()!="")&(self.inputPassword.get()!="")):   
                 #llenando los campos 
                 usuarioLogin= {
                 "UserName": self.inputUserName.get(),
                 "Password": self.inputPassword.get()
                 }
-                #self.root.destroy()
-                #self.comprobandoCredenciales(usuarioLogin)
-                #self.login()
+                self.root.destroy()
+                self.comprobandoCredenciales(usuarioLogin)
+                self.login()
         else:
             MessageBox.showerror("Error!", "Llena todos los campos")
 

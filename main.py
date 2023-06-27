@@ -4,6 +4,7 @@ from Analizador.Aplicacion.SingIn import Login
 from Analizador.Comandos.cripto import decrypt_hex_string
 from Analizador.Aplicacion.variablesGlobales import listaUsuarios
 import tkinter as tk
+import boto3
 #pruebas
 #resultado = gramarMain()
 #analizar = Leer()
@@ -31,6 +32,7 @@ class Main():
         for element in leer:
             #identificando Usuario
             if (contador % 2 == 0):
+               
                 usuario = element
             #identificando Usuario contraseña
             elif (contador % 2 == 1):
@@ -38,7 +40,7 @@ class Main():
                 #password = decrypt_hex_string(b"miaproyecto12345", bytearray.fromhex(element))
                 password = decrypt_hex_string(b"miaproyecto12345", element)
                 usuarios = {
-                    "UserName": usuario,
+                    "UserName": usuario.replace("\r",""),
                     "Password": password
                 }
                 print(usuarios)
@@ -57,8 +59,13 @@ class Main():
 
     #Obteniendo String del archivo de usuarios
     def leerUsuarios(self):
-        f = open("./"+archivo, "r")  # abriendo y creando
-        input = f.read()
+        s3_client = boto3.client('s3')
+        nombre_bucket = '202001574'
+        ruta_archivo_s3 = 'miausuarios.txt'
+        response = s3_client.get_object(Bucket=nombre_bucket, Key=ruta_archivo_s3)
+        
+        contenido = response['Body'].read().decode('utf-8')
+        input = contenido
         self.listaUsuariosFuction(input)
 
 a=Main()
