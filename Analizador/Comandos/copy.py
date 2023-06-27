@@ -45,6 +45,11 @@ class Copy:
             nombre_bucket = '202001574'
             nombreFile=self.getNameFile(self.de)
             ruta_archivo_destino = "archivos/"+self.a+nombreFile
+            #comprobando si ya existe
+            response = s3_client.list_objects_v2(Bucket=nombre_bucket, Prefix=ruta_archivo_destino)
+            if 'Contents' in response:
+                #si existe se le añade (1)
+                ruta_archivo_destino="archivos/"+self.a+nombreFile.replace(".txt","(1).txt")
             s3_client.copy_object(Bucket=nombre_bucket, CopySource=f'{nombre_bucket}/{nombre_archivo}', Key=ruta_archivo_destino)
         #copy directorio
         else:

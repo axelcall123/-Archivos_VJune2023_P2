@@ -48,4 +48,5 @@ class Backup:
                 ruta_relativa=ruta_relativa.replace("\\","/")
                 # Carga el archivo local en el bucket de Amazon S3
                 s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, self.name+"/"+ruta_relativa)
-            print('Elementos transferidos exitosamente al bucket de Amazon S3.')
+            
+        return "Backup para bucket Nombre: "+self.name

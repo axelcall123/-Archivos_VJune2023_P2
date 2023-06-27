@@ -48,8 +48,7 @@ def delete():
     if(request.json['type']=="bucket"):
         delete.nombre=request.json['name']
         delete.ruta=request.json['path']
-        delete.borrarBucket()
-        return {"Eliminacion":"Archivo-Bucket"}
+        return {"Eliminacion":delete.borrarBucket()}
     elif(request.json['type']):
         delete.nombre = request.json['name']
         delete.ruta = request.json['path']
@@ -129,8 +128,7 @@ def backUp():
     backup=Backup()
     if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
         backup.name=request.json['name']
-        backup.backupservertobucket()
-        return {"backUp":"Servidor to bucket"}
+        return {"backUp":backup.backupservertobucket()}
     
 @app.route('/recovery',methods = ['POST'])
 def recovery():

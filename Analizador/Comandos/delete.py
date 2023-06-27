@@ -46,6 +46,7 @@ class Delete:
                 if "archivos/"+self.ruta in a['Key'] and a['Key'] != "archivos/"+self.ruta:
                     #eliminando todos los objetos (al quedar vacio se elimina)
                     client.delete_object(Bucket='202001574', Key=a['Key'])
+            
         
 
 
