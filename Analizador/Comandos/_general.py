@@ -158,20 +158,28 @@ def recorrerJsonServer(ruta, aJson,tipo,nombre):#FIXME:testear
             if tipo=="server":
                 createSever(aA, aJson[aA], ruta+'/')
             elif tipo=="bucket":
-                print(ruta, '>>', aA, '<>', aJson[aA])
+                # print(ruta, '>>', aA, '<>', aJson[aA])
+                s3=boto3.resource('s3')
+                s3.Object('202001574', ruta+aA).put(Body=aJson[aA])
         else:  # folder
             if tipo == "server":#esta dentro asi que
                 os.makedirs(f'{ruta}/{aA}', exist_ok=True)  # creo por si no existe
                 recorrerJsonServer(f'{ruta}/{aA}', aJson[aA],tipo,nombre)
+            elif tipo=="bucket":
+                s3 = boto3.resource('s3')
+                s3.Object('202001574', f'{nombre}/{aA}/')
+                recorrerJsonServer(f'{nombre}/{aA}', aJson[aA], tipo, nombre)
 
 
 def recorrerJsonBucket(ruta,aJson,tipo,nombre):
     for aA in aJson:  # NORMAL
         if '.txt' in aA:  # txt
+            urlSintxt = listado(aA)  # obtengo url sin el txt
+            urlSintxt = urlSintxt.replace(aA.split('/')[0]+'/','') # obteno nombre archivos/.../nombre.txt> .../nombre.txt
             if tipo=="server":
-                urlSintxt = listado(aA)  # obtengo url sin el txt
-                urlSintxt = urlSintxt.replace(aA.split('/')[0]+'/','') # obteno nombre archivos/.../nombre.txt> .../nombre.txt
                 createSever(aA.split('/')[-1], aJson[aA], ruta+nombre+"/"+urlSintxt)
             elif tipo=="bucket":
-                print(aA, '<>', aJson[aA])
+                s3 = boto3.resource('s3')
+                s3.Object('202001574', nombre+"/")
+                s3.Object('202001574', nombre+"/"+urlSintxt+aA.split('/')[-1]).put(Body=aJson[aA])
 
