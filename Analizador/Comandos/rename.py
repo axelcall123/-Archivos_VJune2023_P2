@@ -86,7 +86,7 @@ class Rename:
 
 
 
-
+    #mine
     def renombrarServer(self):
         rs={"ruta":self.ruta,"nombre":self.nombre}
         ruta = rutaSer+rs["ruta"]

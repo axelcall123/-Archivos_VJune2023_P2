@@ -1,5 +1,6 @@
 import boto3
 import Analizador.Comandos._general as _G
+from Analizador.Comandos.varDef import *
 import os
 class DeleteAll:
     def __init__ (self):
@@ -36,8 +37,8 @@ class DeleteAll:
 
 
 
-
+    #mine
     def borrarServer(self):
-        for item in os.listdir('./archivos/'):
-            _G.deleteSever(item)
+        for item in os.listdir(rutaSer):
+            _G.deleteSever(f'{rutaSer}/{item}')
         return 'todos los archivos y directorios han sido eliminados'

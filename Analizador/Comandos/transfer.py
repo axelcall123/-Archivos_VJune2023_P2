@@ -111,7 +111,7 @@ class Transfer:
 
 
 
-
+    #mine
     def trasferirBucketToServer(self):
         s3 = boto3.client('s3')
         name="202001574"
@@ -120,11 +120,12 @@ class Transfer:
             return 'no existe ruta en el bucket'
         if '.txt' in rs["from"]:  # copio solo un archivo
             #                         ruta nombre                              nombre
-            rename = _G.creRenameL(os.path.join(
-                rutaSer, rs["to"]), rs['from'].split('/')[-1])
+            rename = _G.creRenameL(
+                rutaSer+ rs["to"], rs['from'].split('/')[-1])
             s3.download_file(name, f'{rutaB}{rs["from"]}', os.path.join(
                 rutaSer+rs["to"], rename))  # ubicacion boto,ubicacion local
-            s3.delete_object(name, f'{rutaB}{rs["from"]}')  # extra borrar file
+            # extra borrar file
+            s3.delete_object(Bucket=name, Key=f'{rutaB}{rs["from"]}')
             return 'transfirio el archivo'
         else:  # copio una carpeta
             response = s3.list_objects_v2(

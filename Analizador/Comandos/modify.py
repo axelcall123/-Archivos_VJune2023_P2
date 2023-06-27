@@ -46,7 +46,7 @@ class Modify:
 
 
 
-
+    #mine
     def modificarServer(self):
         rs={"cuerpo":self.contenido,"ruta":self.ruta}
         if os.path.exists(rutaSer+rs["ruta"]):

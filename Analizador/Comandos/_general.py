@@ -1,7 +1,8 @@
 import os
 import shutil
 import json
-
+import boto3
+from Analizador.Comandos.varDef import *
 
 def creRenameL(idFolderRaiz: str, nombre: str) -> str:
     # FIXME: para no reahacerlo se puede poner otro parametro par unirlo con navacion carpetas, se puede optimizar
@@ -26,6 +27,13 @@ def deleteSever(ruta):
     else:
         return 'ruta no encontrada'
 
+def createSever(nombre,contenido,ruta):
+    os.makedirs(ruta, exist_ok=True)  # creo por si no existe
+    # renombro si existe
+    reName = creRenameL(ruta, nombre)
+    f = open(ruta+reName, "a+")  # abriendo y creando
+    f.write(f.read()+contenido)
+    f.close()  # siempre cerrar
 
 def copySever(urlTo, urlFrom):
     if not (os.path.exists(urlTo) and os.path.exists(urlFrom)):  # existe es carpeta
@@ -80,7 +88,7 @@ def readTxt(url):
     return file_content
 
 
-def listadoJson(url) -> json:  # posicion es para saber si es el primero, subcarpeta
+def listadoJsonServer(url) -> json:  # posicion es para saber si es el primero, subcarpeta
     listado = os.listdir(url)
     txtJson = ''
     for iI in range(len(listado)):
@@ -96,13 +104,33 @@ def listadoJson(url) -> json:  # posicion es para saber si es el primero, subcar
             if iI < len(listado)-1:  # ultimo item
                 txtJson += '"' + \
                     listado[iI] + \
-                    '":{'+listadoJson(os.path.join(url, listado[iI]))+'},'
+                    '":{'+listadoJsonServer(os.path.join(url, listado[iI]))+'},'
             else:
                 txtJson += '"' + \
                     listado[iI] + \
-                    '":{'+listadoJson(os.path.join(url, listado[iI]))+'}'
+                    '":{'+listadoJsonServer(os.path.join(url, listado[iI]))+'}'
                 return txtJson
     return ''
+
+
+def listadoJsonBucket(pathOrigen) -> json:
+    s3 = boto3.client('s3')
+    name = '202001574'
+    response = s3.list_objects_v2(Bucket=name, Prefix=f'{rutaB}{pathOrigen}')
+    jsonTxt=''
+    contenido=0
+    for obj in response['Contents']:
+        contenido=''
+        if not obj['Key'].endswith('/'):  # solo files
+            respuesta = s3.get_object(Bucket=name, Key=obj['Key'])
+            contenido = respuesta['Body'].read().decode('utf-8')  # contenido
+            #             ruta          carpetas,array           ,     nombre
+            if contenido==0:
+                jsonTxt += '"'+obj["Key"]+":"+contenido+'"'
+            else:
+                jsonTxt += ',"'+obj["Key"]+":"+contenido+'"'
+        contenido+=1
+    return jsonTxt
 
 
 def listado(url):  # listado sin el txt
@@ -122,3 +150,28 @@ def existeBucket(s3, name, f_key):
         return True
     except:
         return False
+
+
+def recorrerJsonServer(ruta, aJson,tipo):#FIXME:testear
+    for aA in aJson:  # NORMAL
+        if '.txt' in aA:  # txt
+            if tipo=="server":
+                createSever(aA, aJson[aA], ruta+'/')
+            elif tipo=="bucket":
+                print(ruta, '>>', aA, '<>', aJson[aA])
+        else:  # folder
+            if tipo == "server":
+                os.makedirs(f'{ruta}/{aA}', exist_ok=True)  # creo por si no existe
+                recorrerJsonServer(f'{ruta}/{aA}', aJson[aA],tipo)
+
+
+def recorrerJsonBucket(ruta,aJson,tipo):
+    for aA in aJson:  # NORMAL
+        if '.txt' in aA:  # txt
+            if tipo=="server":
+                urlSintxt = listado(aA)  # obtengo url sin el txt
+                urlSintxt = urlSintxt.replace(aA.split('/')[0]+'/','') # obteno nombre archivos/.../nombre.txt> .../nombre.txt
+                createSever(aA.split('/')[-1], aJson[aA], ruta+urlSintxt)
+            elif tipo=="bucket":
+                print(aA, '<>', aJson[aA])
+

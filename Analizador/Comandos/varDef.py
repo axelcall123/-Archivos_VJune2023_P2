@@ -1,3 +1,3 @@
 rutaSer='./archivos'
-rutaB='archivoT1'
+rutaB='archivosT'
 ipMine="http://192.168.0.29:1000/"

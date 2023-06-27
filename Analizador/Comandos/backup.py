@@ -1,6 +1,11 @@
 import boto3
 from pathlib import Path
 import os
+from Analizador.Comandos.copy import Copy
+import Analizador.Comandos._general as _G
+from Analizador.Comandos.varDef import *
+import requests
+import json
 class Backup:
     def __init__ (self):
         self.tipoA=""
@@ -50,3 +55,52 @@ class Backup:
                 s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, self.name+"/"+ruta_relativa)
             
         return "Backup para bucket Nombre: "+self.name
+    
+
+    
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    #mine
+    def backupbuckettoserver(self):
+        copy = Copy()
+        copy.de = '/'
+        copy.a = f'/{self.name}/'
+        copy.copiarBucketToServer()
+
+    def backupSend(self):
+        if self.tipoDe=="server":#recorre en modo server
+            res = _G.listadoJsonServer(rutaSer)
+            print("json:",res)
+            res = requests.get(
+                url=f"http://{self.ip}:{self.port}/respuestaT",  # URL METODO
+                json={"type_to": self.tipoA, "tyep_from": self.tipoDe, "name": self.name,
+                      "archivos": _G.listadoJsonServer(rutaSer)}  # LO QUE ENVIO
+            )
+            print(res.text)
+        elif self.tipoDe=="bucket":#recorro en modo bucket
+            res = _G.listadoJsonBucket('/')
+            print("json:", res)
+            res = requests.get(
+                url=f"http://{self.ip}:{self.port}/respuestaT",  # URL METODO
+                json={"type_to": self.tipoA, "tyep_from": self.tipoDe, "name": self.name,
+                      "archivos": _G.listadoJsonBucket('/')}  # LO QUE ENVIO
+            )
+            print(res.text)
+        
+    def backupReceive(self):#FIXME: falta la opcion 
+        if self.tipoDe=="server":
+            _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA)
+        elif self.tipoDe == "bucket":
+            _G.recorrerJsonBucket(
+                f'{rutaSer}/{self.name}/', self.archivos, self.tipoA)

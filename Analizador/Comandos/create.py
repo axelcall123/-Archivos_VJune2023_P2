@@ -67,12 +67,7 @@ class Create:
 
 
 
-    
+    #mine
     def creacionServer(self):
         rs={"nombre":self.nombre,"contenido":self.contenido,"ruta":self.ruta}
-        os.makedirs(rutaSer+rs["ruta"], exist_ok=True)  # creo por si no existe
-        # renombro si existe
-        reName = _G.creRenameL(rutaSer+rs["ruta"], rs["nombre"])
-        f = open(rutaSer+rs["ruta"]+reName, "a+")  # abriendo y creando
-        f.write(f.read()+rs["contenido"])
-        f.close()  # siempre cerrar
+        _G.createSever(rs["nombre"],rs["contenido"],rutaSer+rs["ruta"])

@@ -123,20 +123,117 @@ def deleteAll():
     elif(request.json['type']=='server'):
         return {"borrar": deleteAll.borrarServer()}
 
-@app.route('/backup',methods = ['POST'])
-def backUp():
-    backup=Backup()
-    if(request.json['type_from']=="server")and(request.json['type_to']=="bucket"):
-        backup.name=request.json['name']
-        return {"backUp":backup.backupservertobucket()}
-    
-@app.route('/recovery',methods = ['POST'])
-def recovery():
-    recovery=Recovery()
-    if(request.json['type_from']=="bucket")and(request.json['type_to']=="server"):
-        recovery.name=request.json['name']
+
+@app.route('/backupN', methods=['POST'])  # buckup solo nuestro
+def backUpN():
+    backup = Backup()
+    if ("ip" in request.json) and ("port" in request.json):  # sent
+        backup.ip = request.json['ip']
+        backup.port = request.json['port']
+        backup.name = request.json['name']
+        backup.tipoA = request.json['type_to']
+        backup.tipoDe = request.json['type_from']
+        if (request.json['type_to'] == "server"):  # envio a su server
+            #listado de todo el server
+            backup.backupSend()
+            return {"backUpS": "envio al otro servidor"}  # envio a su bukcet
+        elif (request.json['type_to'] == "bucket"):
+            #listado de todo el bucket
+            backup.backupSend()
+            return {"backUpB": "envio al otro servidor"}
+    elif (request.json['type_from'] == "server") and (request.json['type_to'] == "bucket"):  # ready
+        backup.name = request.json['name']
+        backup.backupservertobucket()
+        return {"backUp": "Servidor to bucket"}
+    elif (request.json['type_from'] == "bucket") and (request.json['type_to'] == "server"):  # mine<ready
+        backup.name = request.json['name']
+        backup.backupbuckettoserver()
+        return {"backUp": "Bucket to servidor"}
+    # elif(request.json['type_from']=="server")and(request.json['type_to']=="server"):
+    #     backup.name=request.json['name']
+    #     backup.backupservertoserver()
+    #     return {"backUp": "Servidor to servidor"}
+    # elif(request.json['type_from']=="bucket")and(request.json['type_to']=="bucket"):
+    #     backup.name=request.json['name']
+    #     backup.backupbuckettobucket()
+    #     return {"backUp": "Bucket to bucket"}
+
+
+@app.route('/recoveryN', methods=['POST'])  # buckup solo nuestro
+def recoveryN():
+    recovery = Recovery()
+    if ("ip" in request.json) and ("port" in request.json):  # sent
+        recovery.ip = request.json['ip']
+        recovery.port = request.json['port']
+        recovery.name = request.json['name']
+        recovery.tipoA = request.json['type_to']
+        recovery.tipoDe = request.json['type_from']
+        if (request.json['type_from'] == "server"):  # viene de server
+            recovery.recoveryReceive()
+            return {"recoveryS": "envio al otro servidor"}  # viene de bucket
+        elif (request.json['type_from'] == "bucket"):
+            recovery.recoveryReceive()
+            return {"recoveryB": "envio al otro servidor"}
+    elif (request.json['type_from'] == "bucket") and (request.json['type_to'] == "server"):  # ready
+        recovery.name = request.json['name']
         recovery.recoveryBuckettoServer()
-        return {"recovery":"Servidor to bucket"}
+        return {"recovery": "bucket to Servidor"}
+    elif (request.json['type_from'] == "server") and (request.json['type_to'] == "bucket"):  # mine
+        recovery.name = request.json['name']
+        recovery.recoveryServertobucket()
+        return {"recovery": "Servidor to bucket"}
+    # elif(request.json['type_from']=="bucket")and(request.json['type_to']=="bucket"):
+    #     recovery.name=request.json['name']
+    #     recovery.recoveryBuckettoBucket()
+    #     return {"recovery":"Bucket to bucket"}
+    # elif(request.json['type_from']=="server")and(request.json['type_to']=="server"):
+    #     recovery.name=request.json['name']
+    #     recovery.recoveryServertoserver()
+    #     return {"recovery":"Servidor to servidor"}
+
+
+@app.route('/backupO', methods=['POST'])  # bucket de los demas
+def backUpO():
+    backup = Backup()
+    if request.json['type_from'] == "server":  # viende de server
+        backup.name = request.json['name']
+        backup.tipoA = request.json['type_to']
+        backup.tipoDe = request.json['type_from']
+        backup.archivos = request.json['archivos']
+        backup.backupReceive()
+        return {"backUp": "Servidor to bucket"}
+    elif request.json['type_from'] == "bucket":  # viene de bucket
+        backup.name = request.json['name']
+        backup.tipoA = request.json['type_to']
+        backup.tipoDe = request.json['type_from']
+        backup.archivos = request.json['archivos']
+        backup.backupReceive()
+        return {"backUp": "Servidor to bucket"}
+
+
+@app.route('/recoveryO', methods=['POST'])  # bucket de los demas
+def recoveryO():
+    recovery = Recovery()
+    if request.json['type_from'] == "server":
+        recovery.name = request.json['name']
+        recovery.tipoA = request.json['type_to']
+        recovery.tipoDe = request.json['type_from']
+        recovery.archivos = request.json['archivos']
+        recovery.recoverySend()
+        return {"backUp": "Servidor to bucket"}
+    elif request.json['type_from'] == "bucket":
+        recovery.name = request.json['name']
+        recovery.tipoA = request.json['type_to']
+        recovery.tipoDe = request.json['type_from']
+        recovery.archivos = request.json['archivos']
+        recovery.recoverySend()
+        return {"backUp": "Servidor to bucket"}
+
+
+@app.route('/respuestaT', methods=['POST'])
+def responseT():
+    res = request.json
+    return {"respuesta": request.json}
     
 
 @app.route('/open',methods = ['POST'])

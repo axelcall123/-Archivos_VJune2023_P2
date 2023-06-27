@@ -1,5 +1,9 @@
 import os
 import boto3
+from Analizador.Comandos.copy import Copy
+import Analizador.Comandos._general as _G
+from Analizador.Comandos.varDef import *
+import requests
 class Recovery:
     def __init__ (self):
         self.tipoA=""
@@ -54,3 +58,54 @@ class Recovery:
             print('Directorio descargado exitosamente desde el bucket de Amazon S3.')
 
         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #mine
+    def recoveryServertobucket(self):
+        copy = Copy()
+        copy.de = '/'
+        copy.a = f'/{self.name}/'
+        copy.copyservetobucket()
+        print()
+
+    def recoveryReceive(self):
+        if self.tipoDe == "server":
+            _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA)
+        elif self.tipoDe == "bucket":
+            _G.recorrerJsonBucket(
+                f'{rutaSer}/{self.name}/', self.archivos, self.tipoA)
+            
+    def recoverySend(self):
+        if self.tipoDe == "server":  # recorre en modo server
+            res = _G.listadoJsonServer(rutaSer)
+            print("json:", res)
+            res = requests.get(
+                url=f"http://{self.ip}:{self.port}/respuestaT",  # URL METODO
+                json={"type_to": self.tipoA, "tyep_from": self.tipoDe, "name": self.name,
+                      "archivos": _G.listadoJsonServer(rutaSer)}  # LO QUE ENVIO
+            )
+            print(res.text)
+        elif self.tipoDe == "bucket":  # recorro en modo bucket
+            res = _G.listadoJsonBucket('/')
+            print("json:", res)
+            res = requests.get(
+                url=f"http://{self.ip}:{self.port}/respuestaT",  # URL METODO
+                json={"type_to": self.tipoA, "tyep_from": self.tipoDe, "name": self.name,
+                      "archivos": _G.listadoJsonBucket('/')}  # LO QUE ENVIO
+            )
+            print(res.text)

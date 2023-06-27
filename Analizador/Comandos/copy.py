@@ -120,6 +120,8 @@ class Copy:
 
 
 
+
+    #mine
     def copiarServerToServer(self):
         rs={"from":self.de,"to":self.a}
         return _G.copySever(rutaSer+rs["to"], rutaSer+rs["from"])
@@ -127,13 +129,13 @@ class Copy:
     def copiarBucketToServer(self):
         s3 = boto3.client('s3')
         name='202001574'
-        rs={"from":self.de,"to":self.a}#FIXME cambiar a self.de y self.a
+        rs={"from":self.de,"to":self.a}
         if not _G.existeBucket(s3, name, f'{rutaB}{rs["from"]}'):
             return 'no existe ruta en el bucket'
         if '.txt' in rs["from"]:  # copio solo un archivo
             #                         ruta nombre                              nombre
-            rename = _G.creRenameL(os.path.join(
-                rutaSer, rs["to"]), rs['from'].split('/')[-1])
+            rename = _G.creRenameL(
+                rutaSer+ rs["to"], rs['from'].split('/')[-1])
             s3.download_file(name, f'{rutaB}{rs["from"]}', os.path.join(
                 rutaSer+rs["to"], rename))  # ubicacion boto,ubicacion local
             return 'copio el archivo'
