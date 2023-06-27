@@ -37,7 +37,11 @@ class Open:
 
 
     def openServer(self):
-        ruta=os.path.join(rutaSer,self.name)
+        ruta=""
+        if "/" in self.name:
+            self.name = rutaSer+ self.name
+        else:
+            ruta=os.path.join(rutaSer,self.name)
         if os.path.exists(ruta) and '.txt' in self.Name:
             return _G.readTxt(ruta)
         else:
