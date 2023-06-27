@@ -103,6 +103,12 @@ class Backup:
         
     def backupReceive(self):#FIXME: falta la opcion 
         if self.tipoDe=="server":
-            _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA,self.name)
+            if self.tipoA=="server":
+                _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA,self.name)
+            elif self.tipoA=="bucket":
+                _G.recorrerJsonServer(f'{self.name}/',self.archivos,self.tipoA,self.name)
         elif self.tipoDe == "bucket":
-            _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name)
+            if self.tipoA == "server":
+                _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name)
+            elif self.tipoA == "bucket":
+                _G.recorrerJsonBucket(f'/', self.archivos, self.tipoA,self.name)

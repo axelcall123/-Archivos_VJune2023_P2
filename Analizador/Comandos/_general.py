@@ -166,9 +166,9 @@ def recorrerJsonServer(ruta, aJson,tipo,nombre):#FIXME:testear
                 os.makedirs(f'{ruta}/{aA}', exist_ok=True)  # creo por si no existe
                 recorrerJsonServer(f'{ruta}/{aA}', aJson[aA],tipo,nombre)
             elif tipo=="bucket":
-                s3 = boto3.resource('s3')
-                s3.Object('202001574', f'{nombre}/{aA}/')
-                recorrerJsonServer(f'{nombre}/{aA}', aJson[aA], tipo, nombre)
+                # s3 = boto3.resource('s3')
+                # s3.Object('202001574', f'{nombre}/{aA}/')
+                recorrerJsonServer(f'{ruta}{aA}/', aJson[aA], tipo, nombre)
 
 
 def recorrerJsonBucket(ruta,aJson,tipo,nombre):
@@ -180,6 +180,5 @@ def recorrerJsonBucket(ruta,aJson,tipo,nombre):
                 createSever(aA.split('/')[-1], aJson[aA], ruta+nombre+"/"+urlSintxt)
             elif tipo=="bucket":
                 s3 = boto3.resource('s3')
-                s3.Object('202001574', nombre+"/")
-                s3.Object('202001574', nombre+"/"+urlSintxt+aA.split('/')[-1]).put(Body=aJson[aA])
+                s3.Object('202001574', aA).put(Body=aJson[aA])
 

@@ -94,7 +94,10 @@ class Recovery:
             )
             # _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA,self.name) #only tests FIXME:cambiar depues del test
             #{rutaSer}/{self.name} | {rutaSer}
-            _G.recorrerJsonServer(f'{rutaSer}/{self.name}',res["archivos"],self.tipoA,self.name) #original
+            if self.tipoA == "server":
+                _G.recorrerJsonServer(f'{rutaSer}/{self.name}',res["archivos"],self.tipoA,self.name) #original
+            elif self.tipoA == "bucket":
+                _G.recorrerJsonServer(f'{self.name}/', res["archivos"], self.tipoA, self.name)
             return res.text
         elif self.tipoDe == "bucket":
             res = requests.get(
@@ -103,7 +106,10 @@ class Recovery:
                       "name": self.name, "archivos": self.archivos}  # LO QUE ENVIO
             )
             # _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name) #only tests
-            _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name) #original
+            if self.tipoA == "server":
+                _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name) #original
+            elif self.tipoA == "bucket":
+                _G.recorrerJsonBucket(f'/', self.archivos, self.tipoA,self.name)
             return res.text
     def recoverySend(self):
         if self.tipoDe == "server":  
