@@ -144,8 +144,7 @@ def open():
     open=Open()
     if(request.json['type']=="bucket"):
         open.name=request.json['name']
-        open.openBucket()
-        return {"open":" bucket file"}
+        return {"open":open.openBucket()}
 
 
 
