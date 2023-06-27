@@ -43,7 +43,7 @@ class Open:
             self.name = rutaSer+ self.name
         else:
             ruta=os.path.join(rutaSer,self.name)
-        if os.path.exists(ruta) and '.txt' in self.Name:
+        if os.path.exists(ruta) and '.txt' in self.name:
             return _G.readTxt(ruta)
         else:
             return 'No existe el archivo, o es un fodler'
@@ -55,11 +55,12 @@ class Open:
     
     def openSend(self):
         if self.tipo=="server":
+            ruta = ""
             if "/" in self.name:
                 self.name = rutaSer + self.name
             else:
                 ruta = os.path.join(rutaSer, self.name)
-            if os.path.exists(ruta) and '.txt' in self.Name:
+            if os.path.exists(ruta) and '.txt' in self.name:
                 return _G.readTxt(ruta)
             else:
                 return 'No existe el archivo, o es un fodler'
@@ -75,8 +76,9 @@ class Open:
             return contenido
 
     def openRecive(self):
+        # res={"name":"asdfsd.txt","contenido":"su makina"}
         res = requests.get(
-            url=f"http://{self.ip}:{self.port}/backupg",  # URL METODO
+            url=f"http://{self.ip}:{self.port}/opena",  # URL METODO
             json={"type": self.tipo, "name": self.name}  # LO QUE ENVIO
         )
         return [res["name"],res["contenido"]]

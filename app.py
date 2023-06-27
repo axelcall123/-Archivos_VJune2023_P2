@@ -249,8 +249,12 @@ def responseT():
 def openS():
     opeN=Open()
     if (request.json['ip'] != '') and (request.json['port'] != ''):  # sent
+        opeN.name = request.json['name']
+        opeN.tipo=request.json['type']
+        opeN.ip = request.json['ip']
+        opeN.port = request.json['port']
         array=opeN.openRecive()
-        return {"open":f'nombre:{array[0],"contenido":array[1]}'}
+        return {"open":f'nombre:{array[0]}, contenido:{array[1]}'}
     if(request.json['type']=="bucket"):
         opeN.name=request.json['name']
         return {"openB":opeN.openBucket()}
