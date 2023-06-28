@@ -70,6 +70,6 @@ class Delete:
     def borrarServer(self):
         rs={"nombre":self.nombre,"ruta":self.ruta}
         ruta = rutaSer+rs["ruta"]
-        if rs["nombre"]=='':
+        if rs["nombre"]!='':
             ruta = ruta+rs["nombre"]
         return _G.deleteSever(ruta)
