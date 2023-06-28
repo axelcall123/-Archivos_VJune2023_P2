@@ -86,40 +86,44 @@ class Copy:
     def copiarServerToBucket(self):
         if ".txt" in self.de:# si es un archivo 
             s3_client = boto3.client('s3')
-            print({"from":"./archivos/"+self.de})
-            self.a=self.a.replace('/',  '', 1)
             nombreFile=self.getNameFile(self.de)
-            print({"to":"archivos/"+self.a})
-            response = s3_client.list_objects_v2(Bucket=nombre_bucket, Prefix="archivos/"+self.a)
-            if("/" in self.a):
-                self.a=self.a.replace('/',  '', 1)
+            s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a)
+            response = s3_client.list_objects_v2(Bucket="202001574", Prefix="archivos/"+self.a)
             if 'Contents' in response:
-                s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile.replace(".txt","(1).txt"))
+                if("/" in self.a):
+                    self.a=self.a.replace('/',  '', 1)
+                response = s3_client.list_objects_v2(Bucket="202001574", Prefix="archivos/"+self.a+nombreFile)
+                if 'Contents' in response:
+                    s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile.replace(".txt","(1).txt"))
+                else:
+                    s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile)
             else:
-                s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile)
+                    print("No se encontro ruta")
+            print({"from":"./archivos/"+self.de})
+            print({"to":"archivos/"+self.a+nombreFile})
         #copy directorio
         else:
             s3_client = boto3.client('s3')
-            # Ruta del directorio local que deseas transferir
             directorio_local = './archivos/'+self.de
-            print({"from":"./archivos/"+self.de})
-            # Nombre del bucket de Amazon S3
             nombre_bucket = '202001574'
-            # Recorre el directorio y subdirectorios
-            
+            if("/" in self.a):
+                self.a=self.a.replace('/',  '', 1)
+                print({"self a":self.a})
             for ruta_archivo_local in Path(directorio_local).rglob('*'):
                     if ruta_archivo_local.is_file():
                             # Obtiene la ruta relativa del archivo
                             ruta_relativa = str(ruta_archivo_local.relative_to(directorio_local))
                             ruta_relativa=ruta_relativa.replace("\\","/")
                             # Carga el archivo local en el bucket de Amazon S3
-                            response = s3_client.list_objects_v2(Bucket=nombre_bucket, Prefix="archivos"+self.a+ruta_relativa)
+                            response = s3_client.list_objects_v2(Bucket="202001574", Prefix="archivos/"+self.a)
                             if 'Contents' in response:
-                                if ".txt" in ruta_relativa:
-                                    ruta_relativa=ruta_relativa.replace(".txt","(1).txt")
-                            s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, "archivos"+self.a+ruta_relativa)
-                            print({"Rutale relativa":ruta_relativa})
+                                response = s3_client.list_objects_v2(Bucket="202001574", Prefix="archivos/"+self.a+ruta_relativa)
+                                if 'Contents' in response:
+                                    if ".txt" in ruta_relativa:
+                                        ruta_relativa=ruta_relativa.replace(".txt","(1).txt")
+                            s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, "archivos/"+self.a+ruta_relativa)
                             print({"to":"archivos/"+self.a+ruta_relativa})
+
                             
 
                     print('Elementos transferidos exitosamente al bucket de Amazon S3.')

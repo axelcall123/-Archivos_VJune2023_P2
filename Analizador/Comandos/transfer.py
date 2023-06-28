@@ -39,10 +39,14 @@ class Transfer:
             
             nombreFile=self.getNameFile(self.de)
             ruta_archivo_destino = "archivos/"+self.a+nombreFile
-            response = s3_client.list_objects_v2(Bucket="202001574", Prefix=ruta_archivo_destino)
+            response = s3_client.list_objects_v2(Bucket="202001574", Prefix="archivos/"+self.a)
             if 'Contents' in response:
                 nombre_archivo = "archivos/"+self.de
                 nombre_bucket = '202001574'
+                response = s3_client.list_objects_v2(Bucket=nombre_bucket, Prefix=ruta_archivo_destino)
+                if 'Contents' in response:
+                    #si existe se le añade (1)
+                    ruta_archivo_destino="archivos/"+self.a+nombreFile.replace(".txt","(1).txt")
                 s3_client.copy_object(Bucket=nombre_bucket, CopySource=f'{nombre_bucket}/{nombre_archivo}', Key=ruta_archivo_destino)
                 s3_client.delete_object(Bucket=nombre_bucket, Key=nombre_archivo)
             else:
@@ -76,11 +80,23 @@ class Transfer:
     def trasferirServerToBucket(self):
         if ".txt" in self.de:# si es un archivo
             s3_client = boto3.client('s3')
-            print({"from":"./archivos/"+self.de})
             nombreFile=self.getNameFile(self.de)
+            s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a)
+            response = s3_client.list_objects_v2(Bucket="202001574", Prefix="archivos/"+self.a)
+            if 'Contents' in response:
+                if("/" in self.a):
+                    self.a=self.a.replace('/',  '', 1)
+                response = s3_client.list_objects_v2(Bucket="202001574", Prefix="archivos/"+self.a+nombreFile)
+                if 'Contents' in response:
+                    s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile.replace(".txt","(1).txt"))
+                    os.remove("./archivos/"+self.de)
+                else:
+                    s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile)
+                    os.remove("./archivos/"+self.de)
+            else:
+                    print("No se encontro ruta")
+            print({"from":"./archivos/"+self.de})
             print({"to":"archivos/"+self.a+nombreFile})
-            s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile)
-            #os.remove("./archivos/"+self.de)
         # si es un directorio
         else:
             s3_client = boto3.client('s3')
@@ -96,8 +112,10 @@ class Transfer:
                     ruta_relativa = str(ruta_archivo_local.relative_to(directorio_local))
                     ruta_relativa=ruta_relativa.replace("\\","/")
                     # Carga el archivo local en el bucket de Amazon S3
-                    print({"to":"archivos/"+ruta_relativa})
-                    s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, "archivos/"+ruta_relativa)
+                    print({"to":"archivos/"+self.a+ruta_relativa})
+                    if("/" in self.a):
+                        self.a=self.a.replace('/',  '', 1)
+                    s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, "archivos/"+self.a+ruta_relativa)
             for archivo in os.listdir(directorio_local):
                 ruta_archivo = os.path.join(directorio_local, archivo)
                 # Eliminar el archivo si es un archivo
