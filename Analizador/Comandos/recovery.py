@@ -89,7 +89,7 @@ class Recovery:
         if self.tipoDe == "server":
             res = requests.get(
                 url=f"http://{self.ip}:{self.port}/recoveryg",  #URL METODO
-                json={"type_to": self.tipoA, "tyep_from": self.tipoDe,
+                json={"type_to": self.tipoA, "type_from": self.tipoDe,
                       "name": self.name, "archivos": self.archivos}  #LO QUE ENVIO
             )
             # _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA,self.name) #only tests FIXME:cambiar depues del test
@@ -102,14 +102,14 @@ class Recovery:
         elif self.tipoDe == "bucket":
             res = requests.get(
                 url=f"http://{self.ip}:{self.port}/recoveryg",  # URL METODO
-                json={"type_to": self.tipoA, "tyep_from": self.tipoDe,
+                json={"type_to": self.tipoA, "type_from": self.tipoDe,
                       "name": self.name, "archivos": self.archivos}  # LO QUE ENVIO
             )
             # _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name) #only tests
             if self.tipoA == "server":
-                _G.recorrerJsonBucket(f'./', self.archivos, self.tipoA,self.name) #original
+                _G.recorrerJsonBucket(f'./', res["archivos"], self.tipoA,self.name) #original
             elif self.tipoA == "bucket":
-                _G.recorrerJsonBucket(f'/', self.archivos, self.tipoA,self.name)
+                _G.recorrerJsonBucket(f'/', res["archivos"], self.tipoA,self.name)
             return res.text
     def recoverySend(self):
         if self.tipoDe == "server":  

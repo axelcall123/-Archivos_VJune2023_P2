@@ -39,14 +39,14 @@ class Open:
 
     def openServer(self):
         ruta=""
-        if "/" in self.name:
-            self.name = rutaSer+ self.name
+        if self.name[0] in '/':
+            ruta = rutaSer + self.name
         else:
             ruta=os.path.join(rutaSer,self.name)
         if os.path.exists(ruta) and '.txt' in self.name:
             return _G.readTxt(ruta)
         else:
-            return 'No existe el archivo, o es un fodler'
+            return 'No existe el archivo, o es un folder'
         
     
 
@@ -56,14 +56,14 @@ class Open:
     def openSend(self):
         if self.tipo=="server":
             ruta = ""
-            if "/" in self.name:
-                self.name = rutaSer + self.name
+            if self.name[0] in '/':
+                ruta = rutaSer + self.name
             else:
                 ruta = os.path.join(rutaSer, self.name)
             if os.path.exists(ruta) and '.txt' in self.name:
                 return _G.readTxt(ruta)
             else:
-                return 'No existe el archivo, o es un fodler'
+                return 'No existe el archivo, o es un folder'
         elif self.tipo=="bucket":
             if "/" in self.name:
                 self.name = self.name.replace('/',  '', 1)

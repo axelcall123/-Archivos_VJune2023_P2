@@ -139,9 +139,10 @@ class Transfer:
         s3 = boto3.client('s3')
         name="202001574"
         rs={"from":self.de,"to":self.a}
-        if not _G.existeBucket(s3, name, f'{rutaB}{rs["from"]}'):
-            return 'no existe ruta en el bucket'
+        
         if '.txt' in rs["from"]:  # copio solo un archivo
+            if not _G.existeBucket(s3, name, f'{rutaB}{rs["from"]}'):
+                return 'no existe ruta en el bucket'
             #                         ruta nombre                              nombre
             rename = _G.creRenameL(
                 rutaSer+ rs["to"], rs['from'].split('/')[-1])
@@ -153,6 +154,8 @@ class Transfer:
         else:  # copio una carpeta
             response = s3.list_objects_v2(
                 Bucket=name, Prefix=f'{rutaB}{rs["from"]}')  # obtiene todo el listado
+            if not 'Contents' in response:
+                return 'no existe ruta en el bucket'
             folders = []
             for obj in response['Contents']:
                 print(obj['Key'])
@@ -177,7 +180,7 @@ class Transfer:
             for i in reversed(folders):  # borrar todos los folders
                 if i != f'{rutaB}{rs["from"]}':
                     s3.delete_object(Bucket=name, Key=i)
-        return 'tranfiero json'
+        return 'archivos trasnferidos'
 
     def trasferirServerToServer(self):
         rs={"from":self.de,"to":self.a}
