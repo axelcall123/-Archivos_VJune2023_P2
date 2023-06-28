@@ -91,11 +91,9 @@ class MainWindow:
     def bttnEjecComando_command(self):
         stringInput=self.inputConsole.get("1.0", "end-1c")
         grammarInput(stringInput,self.analizar)
-        text += self.outputConsole.get("1.0", "end-1c")+"\n"
-        text += _G.getTxt('$')#retorna el texto
         self.inputConsole.delete("1.0", tk.END)
         self.outputConsole.delete("1.0", tk.END)
-        self.outputConsole.insert(tk.END, text)
+        self.outputConsole.insert(tk.END, _G.getTxt('$'))
 
     def bttnEjecFile_command(self):
         file = filedialog.askopenfile(mode='r', filetypes=[('Python Files', '*')])

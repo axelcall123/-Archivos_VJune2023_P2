@@ -1,5 +1,5 @@
 from Analizador.Aplicacion.variablesGlobales import temporalFile
-
+import json
 
 def getTxt(texto):
     global temporalFile
@@ -12,6 +12,7 @@ def getTxt(texto):
         temporalFile += texto + "\n"
         return 'add'
 
-def getTJson(json):
-    for a in json:
-        getTxt(json[a])
+def getTJson(repuesta):
+    jsoN = json.loads(repuesta.text)
+    for a in jsoN:
+        getTxt(jsoN[a])
