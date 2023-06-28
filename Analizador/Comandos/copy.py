@@ -43,7 +43,7 @@ class Copy:
             s3_client = boto3.client('s3')
             nombreFile=self.getNameFile(self.de)
             ruta_archivo_destino = "archivos/"+self.a+nombreFile
-            response = s3_client.list_objects_v2(Bucket="202001574", Prefix=ruta_archivo_destino)
+            response = s3_client.list_objects_v2(Bucket="202001574", Prefix="archivos/"+self.a)
             if 'Contents' in response:
                 s3_client = boto3.client('s3')
                 nombre_archivo = "archivos/"+self.de
@@ -55,7 +55,8 @@ class Copy:
                     ruta_archivo_destino="archivos/"+self.a+nombreFile.replace(".txt","(1).txt")
                 s3_client.copy_object(Bucket=nombre_bucket, CopySource=f'{nombre_bucket}/{nombre_archivo}', Key=ruta_archivo_destino)
             else:
-                print("No se encontro direccion")
+                print("No se encontro ruta")
+                
         #copy directorio
         else:
             s3_client = boto3.client('s3')
