@@ -4,7 +4,7 @@ import json
 def getTxt(texto):
     global temporalFile
     if texto=='!':#elimina
-        temporalFile += ""
+        temporalFile == ""
         return 'delete'
     elif texto=='$':# retorna el texto
         return temporalFile
