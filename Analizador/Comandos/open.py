@@ -33,6 +33,7 @@ class Open:
         ruta_archivo_s3 = 'archivos/'+self.name
         response = s3_client.get_object(Bucket=nombre_bucket, Key=ruta_archivo_s3)
         contenido = response['Body'].read().decode('utf-8')
+        print({"ESte es el contenido":contenido})
         return contenido
     
 
