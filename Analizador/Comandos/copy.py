@@ -105,14 +105,22 @@ class Copy:
             # Nombre del bucket de Amazon S3
             nombre_bucket = '202001574'
             # Recorre el directorio y subdirectorios
+            
             for ruta_archivo_local in Path(directorio_local).rglob('*'):
                     if ruta_archivo_local.is_file():
                             # Obtiene la ruta relativa del archivo
                             ruta_relativa = str(ruta_archivo_local.relative_to(directorio_local))
                             ruta_relativa=ruta_relativa.replace("\\","/")
                             # Carga el archivo local en el bucket de Amazon S3
+                            response = s3_client.list_objects_v2(Bucket=nombre_bucket, Prefix="archivos"+self.a+ruta_relativa)
+                            if 'Contents' in response:
+                                if ".txt" in ruta_relativa:
+                                    ruta_relativa=ruta_relativa.replace(".txt","(1).txt")
                             s3_client.upload_file(str(ruta_archivo_local), nombre_bucket, "archivos"+self.a+ruta_relativa)
+                            print({"Rutale relativa":ruta_relativa})
                             print({"to":"archivos/"+self.a+ruta_relativa})
+                            
+
                     print('Elementos transferidos exitosamente al bucket de Amazon S3.')
 
     
