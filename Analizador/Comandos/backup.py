@@ -80,7 +80,7 @@ class Backup:
         copy.copiarBucketToServer()
 
     def backupSend(self):
-        if self.tipoDe=="server":#recorre en modo server
+        if self.tipoDe=="server":#recorre de archivos/otros
             resT = _G.listadoJsonServer(rutaSer)
             res = requests.get(
                 url=f"http://{self.ip}:{self.port}/backupg",  # URL METODO
@@ -103,7 +103,7 @@ class Backup:
             return res.text
             # return resT
         
-    def backupReceive(self):
+    def backupReceive(self):#copiar de name/otros
         if self.tipoDe=="server":
             if self.tipoA=="server":
                 _G.recorrerJsonServer(f'./{self.name}',self.archivos,self.tipoA,self.name)

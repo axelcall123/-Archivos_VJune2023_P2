@@ -189,5 +189,5 @@ def recorrerJsonBucket(ruta,aJson,tipo,nombre):
                 createSever(aA.split('/')[-1], aJson[aA], ruta+nombre+"/"+urlSintxt)
             elif tipo=="bucket":
                 s3 = boto3.resource('s3')
-                s3.Object('202001574', aA).put(Body=aJson[aA])
+                s3.Object('202001574', nombre+"/"+aA).put(Body=aJson[aA])
 

@@ -203,15 +203,15 @@ def recoveryO():
     recovery.typeFrom(request.json['type_from'])
     if request.json['type_from'] == "server":
         return jsonify({
-                        "type_to": recovery.self.tipoA
-                        , "type_from": recovery.tipoDe
-                        , "name": recovery.name
+                        "type_to": request.json['name']
+                        , "type_from": request.json['type_from']
+                        , "name": request.json['name']
                         , "archivos": recovery.recoverySend()
                         })
         # return {"backUp": "Servidor to bucket"}
     elif request.json['type_from'] == "bucket":
         return jsonify({
-            "type_to": recovery.self.tipoA
+            "type_to": recovery.tipoA
             , "type_from": recovery.tipoDe
             , "name": recovery.name
             , "archivos": recovery.recoverySend()
