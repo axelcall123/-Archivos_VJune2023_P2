@@ -89,7 +89,13 @@ class Copy:
             self.a=self.a.replace('/',  '', 1)
             nombreFile=self.getNameFile(self.de)
             print({"to":"archivos/"+self.a})
-            s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile)
+            response = s3_client.list_objects_v2(Bucket=nombre_bucket, Prefix="archivos/"+self.a)
+            if("/" in self.a):
+                self.a=self.a.replace('/',  '', 1)
+            if 'Contents' in response:
+                s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile.replace(".txt","(1).txt"))
+            else:
+                s3_client.upload_file("./archivos/"+self.de, "202001574", "archivos/"+self.a+nombreFile)
         #copy directorio
         else:
             s3_client = boto3.client('s3')
