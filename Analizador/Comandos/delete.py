@@ -40,8 +40,10 @@ class Delete:
                 # Elimina el archivo del bucket
                 archivo_objeto.delete()
                 print("Archivo eliminado al bucket")
+                return "Archivo eliminado al bucket"
             else:
                 print("No se encontro direccion")
+                return "No se encontro direccion"
         #eliminado directorio
         else:
             client = boto3.client('s3')
@@ -52,6 +54,7 @@ class Delete:
                 if "archivos/"+self.ruta in a['Key'] and a['Key'] != "archivos/"+self.ruta:
                     #eliminando todos los objetos (al quedar vacio se elimina)
                     client.delete_object(Bucket='202001574', Key=a['Key'])
+            return "Directorio eliminado al bucket"
             
         
 
