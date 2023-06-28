@@ -15,4 +15,4 @@ def getTxt(texto):
 def getTJson(repuesta):
     jsoN = json.loads(repuesta.text)
     for a in jsoN:
-        getTxt(jsoN[a])
+        getTxt(f'{a}<<>>{jsoN[a]}')
