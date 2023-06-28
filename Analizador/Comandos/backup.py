@@ -85,7 +85,7 @@ class Backup:
             res = requests.get(
                 url=f"http://{self.ip}:{self.port}/backupg",  # URL METODO
                 json={"type_to": self.tipoA
-                      , "tyep_from": self.tipoDe
+                      , "type_from": self.tipoDe
                       , "name": self.name
                       ,"archivos": "{"+resT+"}"}  # LO QUE ENVIO
                  )
@@ -96,7 +96,7 @@ class Backup:
             res = requests.get(
                 url=f"http://{self.ip}:{self.port}/backupg",# URL METODO
                 json={"type_to": self.tipoA
-                      , "tyep_from": self.tipoDe
+                      , "type_from": self.tipoDe
                       , "name": self.name
                       ,"archivos": "{"+resT+"}"}  # LO QUE ENVIO
                 )
