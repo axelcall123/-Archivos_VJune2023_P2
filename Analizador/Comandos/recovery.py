@@ -14,13 +14,13 @@ class Recovery:
         self.name=""
         self.archivos={}#FIXME:only test
 
-    def typeTo(self,tipoDe):
+    def typeFrom(self, tipoDe):
         if('"' in tipoDe):
             self.tipoDe=tipoDe.replace("\"", "" )
         else:
             self.tipoDe=tipoDe
 
-    def typeFrom(self,tipoA):
+    def typeTo(self, tipoA):
         if('"' in tipoA):
             self.tipoA=tipoA.replace("\"", "" )
         else:
