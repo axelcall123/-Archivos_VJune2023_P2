@@ -79,11 +79,7 @@ class Recovery:
 
     #mine
     def recoveryServertobucket(self):
-        copy = Copy()
-        copy.de = '/'
-        copy.a = f'/{self.name}/'
-        copy.copyservetobucket()
-        print()
+        _G.transfer_folder(self.name)
 
     def recoveryReceive(self):# here<--------------------
         if self.tipoDe == "server":

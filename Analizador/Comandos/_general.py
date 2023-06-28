@@ -142,9 +142,13 @@ def listadoJsonBucket(pathOrigen) -> json:
 def listado(url):  # listado sin el txt
     array = url.split('/')
     txt = ''
-    for a in range(len(array)):
-        if array[a] == '':
-            array.pop(a)
+    i=0
+    while i<len(array):
+        if array[i] == '':
+            array.pop(i)
+            i-=1
+        i+=1
+
     for a in range(len(array)-1):
         if array[a] == '':
             continue
@@ -191,3 +195,22 @@ def recorrerJsonBucket(ruta,aJson,tipo,nombre):
                 s3 = boto3.resource('s3')
                 s3.Object('202001574', nombre+"/"+aA).put(Body=aJson[aA])
 
+
+def transfer_folder(origen):
+    s3 = boto3.client('s3')
+    name = '202001574'
+    # Retrieve the list of folders in the local directory
+    urlL = './'+origen
+    folders = [f for f in os.listdir(urlL) if os.path.isdir(
+        os.path.join(urlL, f))]
+
+    # subir
+    for folder in folders:
+        folder_path = os.path.join(urlL, folder)
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                localUrl = os.path.join(root, file)
+                carpeta = os.path.relpath(localUrl, urlL)
+                # convierte el separado
+                carpeta = carpeta.replace("\\", "/")
+                s3.upload_file(localUrl, name, origen+'/'+carpeta)

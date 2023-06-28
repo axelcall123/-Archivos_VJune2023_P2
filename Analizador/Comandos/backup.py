@@ -6,6 +6,7 @@ import Analizador.Comandos._general as _G
 from Analizador.Comandos.varDef import *
 import requests
 import json
+import shutil
 class Backup:
     def __init__ (self):
         self.tipoA=""
@@ -73,11 +74,14 @@ class Backup:
     
     
     #mine
-    def backupbuckettoserver(self):
+    def backupbucketrtoserver(self):
         copy = Copy()
         copy.de = '/'
         copy.a = f'/{self.name}/'
         copy.copiarBucketToServer()
+        shutil.move(f'{rutaSer}/{self.name}/','./')
+
+
 
     def backupSend(self):
         if self.tipoDe=="server":#recorre de archivos/otros

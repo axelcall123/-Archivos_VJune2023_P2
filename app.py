@@ -136,7 +136,7 @@ def backUpN():
         backup.backupservertobucket()
         return {"backUp": "Servidor to bucket"}
     elif (request.json['type_from'] == "bucket") and (request.json['type_to'] == "server"):  # mine<ready
-        backup.backupbuckettoserver()
+        backup.backupbucketrtoserver()
         return {"backUp": "Bucket to servidor"}
     # elif(request.json['type_from']=="server")and(request.json['type_to']=="server"):
     #     backup.name=request.json['name']
