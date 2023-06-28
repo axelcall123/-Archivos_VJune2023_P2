@@ -92,7 +92,6 @@ def rename():
         rename.renombrarBucket()
         return {"rename":"Archivo-Bucke"}
     elif(request.json['type']=='server'):
-        rename.nombre = request.json['name']
         return {"rename": rename.renombrarServer()}
 
 @app.route('/modify',methods = ['POST'])

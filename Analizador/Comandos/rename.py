@@ -92,6 +92,7 @@ class Rename:
     #mine
     def renombrarServer(self):
         rs={"ruta":self.ruta,"nombre":self.nombre}
+        print(rs)
         ruta = rutaSer+rs["ruta"]
         nuevaRuta = _G.listado(ruta)
         if os.path.exists(ruta):
