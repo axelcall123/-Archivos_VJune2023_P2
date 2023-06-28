@@ -101,14 +101,14 @@ class Backup:
                 )
             return res.text
         
-    def backupReceive(self):#FIXME: falta la opcion 
+    def backupReceive(self):
         if self.tipoDe=="server":
             if self.tipoA=="server":
-                _G.recorrerJsonServer(f'{rutaSer}/{self.name}',self.archivos,self.tipoA,self.name)
+                _G.recorrerJsonServer(f'./{self.name}',self.archivos,self.tipoA,self.name)
             elif self.tipoA=="bucket":
                 _G.recorrerJsonServer(f'{self.name}/',self.archivos,self.tipoA,self.name)
         elif self.tipoDe == "bucket":
             if self.tipoA == "server":
-                _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name)
+                _G.recorrerJsonBucket(f'./', self.archivos, self.tipoA,self.name)
             elif self.tipoA == "bucket":
                 _G.recorrerJsonBucket(f'/', self.archivos, self.tipoA,self.name)

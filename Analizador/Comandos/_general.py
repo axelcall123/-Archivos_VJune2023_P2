@@ -175,7 +175,7 @@ def recorrerJsonBucket(ruta,aJson,tipo,nombre):
     for aA in aJson:  # NORMAL
         if '.txt' in aA:  # txt
             urlSintxt = listado(aA)  # obtengo url sin el txt
-            urlSintxt = urlSintxt.replace(aA.split('/')[0]+'/','') # obteno nombre archivos/.../nombre.txt> .../nombre.txt
+            # urlSintxt = urlSintxt.replace(aA.split('/')[0]+'/','') # obteno nombre archivos/.../nombre.txt> .../nombre.txt
             if tipo=="server":
                 createSever(aA.split('/')[-1], aJson[aA], ruta+nombre+"/"+urlSintxt)
             elif tipo=="bucket":

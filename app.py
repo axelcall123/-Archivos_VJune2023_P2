@@ -26,16 +26,13 @@ def index():
 @app.route('/create',methods = ['POST'])
 def create():
     create=Create()
+    create.name(request.json['name'])
+    create.body(request.json['body'])
+    create.path(request.json['path'])
     if(request.json['type']=="bucket"):
-        create.name(request.json['name'])
-        create.body(request.json['body'])
-        create.path(request.json['path'])
         create.creacionBucket()
         return {"Creacion": "Archivo-Bucket"}
     elif(request.json['type']):
-        create.name(request.json['name'])
-        create.body(request.json['body'])
-        create.path(request.json['path'])
         create.creacionServer()
         return {"Creacion": "Archivo-Server"}
     return {"Creacion": "f"}
