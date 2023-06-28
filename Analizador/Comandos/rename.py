@@ -52,15 +52,18 @@ class Rename:
             print({"nombre_archivo_actual":self.ruta})
             ruta=self.getRuta(self.ruta)
             self.nombre=self.nombre.replace('/',  '', 1)
-            directorio_nuevo = "archivos/"+ruta+self.nombre
-            print({"nombre_archivo_nuevo":ruta+self.nombre})
+            directorio_nuevo = "archivos/"+ruta+self.nombre+"/"
+            print({"nombre_archivo_nuevo":ruta+self.nombre+"/"})
             response = s3_client.list_objects_v2(Bucket=nombre_bucket, Prefix=directorio_actual)
-            for obj in response['Contents']:
-                nombre_objeto_actual = obj['Key']
-                nombre_objeto_nuevo = nombre_objeto_actual.replace(directorio_actual, directorio_nuevo)
-                s3_client.copy_object(Bucket=nombre_bucket, CopySource=f'{nombre_bucket}/{nombre_objeto_actual}', Key=nombre_objeto_nuevo)
-                s3_client.delete_object(Bucket=nombre_bucket, Key=nombre_objeto_actual)
-            print('Directorio renombrado exitosamente.')
+            if 'Contents' in response:
+                for obj in response['Contents']:
+                    nombre_objeto_actual = obj['Key']
+                    nombre_objeto_nuevo = nombre_objeto_actual.replace(directorio_actual, directorio_nuevo)
+                    s3_client.copy_object(Bucket=nombre_bucket, CopySource=f'{nombre_bucket}/{nombre_objeto_actual}', Key=nombre_objeto_nuevo)
+                    s3_client.delete_object(Bucket=nombre_bucket, Key=nombre_objeto_actual)
+                print('Directorio renombrado exitosamente.')
+            else:
+                print('No se encontro direccion.')
 
     def getRuta(self,path):
         list=path.split("/")

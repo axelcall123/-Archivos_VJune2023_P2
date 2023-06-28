@@ -32,16 +32,22 @@ class Delete:
         self.ruta=self.ruta.replace('/',  '', 1)
         #eliminando archivo
         if self.nombre!="":
+            client = boto3.client('s3')
             s3 = boto3.resource('s3')
-            archivo_objeto = s3.Object("202001574", "archivos/"+self.ruta+self.nombre)
-            # Elimina el archivo del bucket
-            archivo_objeto.delete()
-            print("Archivo eliminado al bucket")
+            response = client.list_objects_v2(Bucket="202001574", Prefix="archivos/"+self.ruta+self.nombre)
+            if 'Contents' in response:
+                archivo_objeto = s3.Object("202001574", "archivos/"+self.ruta+self.nombre)
+                # Elimina el archivo del bucket
+                archivo_objeto.delete()
+                print("Archivo eliminado al bucket")
+            else:
+                print("No se encontro direccion")
         #eliminado directorio
         else:
             client = boto3.client('s3')
             #todos los objetos en directorio
             allobjets=client.list_objects(Bucket="202001574")
+            
             for a in allobjets['Contents']:
                 if "archivos/"+self.ruta in a['Key'] and a['Key'] != "archivos/"+self.ruta:
                     #eliminando todos los objetos (al quedar vacio se elimina)
