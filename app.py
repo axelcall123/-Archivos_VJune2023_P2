@@ -203,17 +203,17 @@ def recoveryO():
     recovery.typeFrom(request.json['type_from'])
     if request.json['type_from'] == "server":
         return jsonify({
-                        "type_to": request.json["type_to"]
-                        , "type_from": request.json['type_from']
-                        , "name": request.json['name']
+                        "type_to": recovery.self.tipoA
+                        , "type_from": recovery.tipoDe
+                        , "name": recovery.name
                         , "archivos": recovery.recoverySend()
                         })
         # return {"backUp": "Servidor to bucket"}
     elif request.json['type_from'] == "bucket":
         return jsonify({
-            "type_to": request.json["type_to"]
-            , "type_from": request.json['type_from']
-            , "name": request.json['name']
+            "type_to": recovery.self.tipoA
+            , "type_from": recovery.tipoDe
+            , "name": recovery.name
             , "archivos": recovery.recoverySend()
         })
         # return {"backUp": "Servidor to bucket"}
@@ -236,9 +236,9 @@ def openS():
         array=opeN.openRecive()
         return {"open":f'nombre:{array[0]}, contenido:{array[1]}'}
     if(request.json['type']=="bucket"):
-        return {"openB":opeN.openBucket()}
+        return {"openB":f'retono en open>>{opeN.openBucket()}'}
     elif(request.json['type']=="server"):
-        return {"openS":opeN.openServer()}
+        return {"openS": f'retono en open>>{opeN.openServer()}'}
 
 
 @app.route('/openO', methods=['POST'])
@@ -247,9 +247,9 @@ def openO():
     opeN.type(request.json['type'])
     opeN.Name(request.json['name'])
     if (request.json['type'] == "bucket"):
-        return {"name":request.json['name'],"contenido": opeN.openSend()}
+        return {"name":opeN.name,"contenido": opeN.openSend()}
     elif (request.json['type'] == "server"):
-        return {"name": request.json['name'], "contenido": opeN.openSend()}
+        return {"name": opeN.name, "contenido": opeN.openSend()}
 
 
 if __name__== "__main__":

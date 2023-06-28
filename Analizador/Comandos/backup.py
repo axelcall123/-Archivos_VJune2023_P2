@@ -90,6 +90,7 @@ class Backup:
                       ,"archivos": "{"+resT+"}"}  # LO QUE ENVIO
                  )
             return res.text
+            # return resT
         elif self.tipoDe=="bucket":#recorro en modo bucket
             resT = _G.listadoJsonBucket(f'{rutaB}/')
             res = requests.get(
@@ -100,6 +101,7 @@ class Backup:
                       ,"archivos": "{"+resT+"}"}  # LO QUE ENVIO
                 )
             return res.text
+            # return resT
         
     def backupReceive(self):
         if self.tipoDe=="server":

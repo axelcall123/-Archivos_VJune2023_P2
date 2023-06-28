@@ -90,12 +90,14 @@ class Rename:
 
 
     #mine
+
+
     def renombrarServer(self):
-        rs={"ruta":self.ruta,"nombre":self.nombre}
-        print(rs)
+        rs = {"ruta": self.ruta, "nombre": self.nombre}
         ruta = rutaSer+rs["ruta"]
-        nuevaRuta = _G.listado(ruta)
+        nuevaRuta = ''
         if os.path.exists(ruta):
+            nuevaRuta = _G.listado(ruta)
             if os.path.exists(nuevaRuta+rs["nombre"]):
                 return 'ya existe el archivo'
             else:

@@ -107,9 +107,9 @@ class Recovery:
             )
             # _G.recorrerJsonBucket(f'{rutaSer}/', self.archivos, self.tipoA,self.name) #only tests
             if self.tipoA == "server":
-                _G.recorrerJsonBucket(f'./', self.archivos, self.tipoA,self.name) #original
+                _G.recorrerJsonBucket(f'./', res["archivos"], self.tipoA,self.name) #original
             elif self.tipoA == "bucket":
-                _G.recorrerJsonBucket(f'/', self.archivos, self.tipoA,self.name)
+                _G.recorrerJsonBucket(f'/', res["archivos"], self.tipoA,self.name)
             return res.text
     def recoverySend(self):
         if self.tipoDe == "server":  

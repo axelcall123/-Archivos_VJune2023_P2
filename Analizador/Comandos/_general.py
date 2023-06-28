@@ -4,6 +4,12 @@ import json
 import boto3
 from Analizador.Comandos.varDef import *
 
+def endPath(string):
+    if string.endswith('/') and not ".txt" in string:#solo sea /a/b/c/ | /a/b/c
+        return string
+    else:
+        return string+'/'
+
 def creRenameL(idFolderRaiz: str, nombre: str) -> str:
     # FIXME: para no reahacerlo se puede poner otro parametro par unirlo con navacion carpetas, se puede optimizar
     if os.path.exists(idFolderRaiz+'/'+nombre):  # existe nombre
@@ -136,6 +142,9 @@ def listadoJsonBucket(pathOrigen) -> json:
 def listado(url):  # listado sin el txt
     array = url.split('/')
     txt = ''
+    for a in range(len(array)):
+        if array[a] == '':
+            array.pop(a)
     for a in range(len(array)-1):
         if array[a] == '':
             continue
