@@ -87,10 +87,10 @@ def t_RUTA(t):
     t.value = t.value.lower()
     return t
 
-def t_AIP(t):
-    r'\d{1,3}(\.\d{1,3}){3}'
-    t.value = t.value.lower()
-    return t
+# def t_AIP(t):
+#     r'\d{1,3}[\.\d{1,3}]{3}'
+#     t.value = t.value.lower()
+#     return t
 
 # def t_WORD(t):
 #     r'[a-zA-Z][a-zA-Z0-9_]*]'
@@ -192,7 +192,7 @@ def p_sub(p):
             | TO RUTA
             | TYPE_TO tipo
             | TYPE_FROM tipo
-            | IP AIP
+            | IP STRING
             | PORT APORT
     '''
     arr = []

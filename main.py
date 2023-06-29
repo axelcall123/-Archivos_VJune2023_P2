@@ -55,7 +55,7 @@ class Main():
         analizar = Leer()
         for res in resultado:
             print(res)
-        analizar.comando(resultado)
+        # analizar.comando(resultado)
 
     #Obteniendo String del archivo de usuarios
     def leerUsuarios(self):
@@ -69,5 +69,5 @@ class Main():
         self.listaUsuariosFuction(input)
 
 a=Main()
-a.leerUsuarios()
-# a.test()
+# a.leerUsuarios()
+a.test()
