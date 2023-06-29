@@ -69,5 +69,5 @@ class Main():
         self.listaUsuariosFuction(input)
 
 a=Main()
-# a.leerUsuarios()
-a.test()
+a.leerUsuarios()
+# a.test()
