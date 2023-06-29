@@ -86,7 +86,7 @@ class Backup:
     def backupSend(self):
         if self.tipoDe=="server":#recorre de archivos/otros
             resT = _G.listadoJsonServer(rutaSer)
-            res = requests.get(
+            res = requests.post(
                 url=f"http://{self.ip}:{self.port}/backupg",  # URL METODO
                 json={"type_to": self.tipoA
                       , "type_from": self.tipoDe
@@ -97,7 +97,7 @@ class Backup:
             # return resT
         elif self.tipoDe=="bucket":#recorro en modo bucket
             resT = _G.listadoJsonBucket(f'{rutaB}/')
-            res = requests.get(
+            res = requests.post(
                 url=f"http://{self.ip}:{self.port}/backupg",# URL METODO
                 json={"type_to": self.tipoA
                       , "type_from": self.tipoDe

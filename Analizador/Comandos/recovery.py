@@ -83,7 +83,7 @@ class Recovery:
 
     def recoveryReceive(self):# here<--------------------
         if self.tipoDe == "server":
-            res = requests.get(
+            res = requests.post(
                 url=f"http://{self.ip}:{self.port}/recoveryg",  #URL METODO
                 json={"type_to": self.tipoA, "type_from": self.tipoDe,
                       "name": self.name, "archivos": self.archivos}  #LO QUE ENVIO
@@ -96,7 +96,7 @@ class Recovery:
                 _G.recorrerJsonServer(f'{self.name}/', res["archivos"], self.tipoA, self.name)
             return res.text
         elif self.tipoDe == "bucket":
-            res = requests.get(
+            res = requests.post(
                 url=f"http://{self.ip}:{self.port}/recoveryg",  # URL METODO
                 json={"type_to": self.tipoA, "type_from": self.tipoDe,
                       "name": self.name, "archivos": self.archivos}  # LO QUE ENVIO
