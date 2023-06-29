@@ -147,7 +147,7 @@ class Leer:
                                     myobjBackup['name']=elementos2[1]
                             comandoUrl = url+"/backupN"
                             x = requests.post(comandoUrl, json = myobjBackup)
-                            print(myobjModify)
+                            print(myobjBackup)
                             _G.getTJson(x)
                 if (comando == "recovery"):  # !Comando add
                     myobjRecovery = {'type_to': '',
