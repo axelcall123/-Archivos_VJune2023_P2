@@ -3,6 +3,7 @@ from Analizador.Comandos.varDef import *
 import Analizador.Comandos._general as _G
 import os
 import requests
+import json
 class Open:
     def __init__ (self):
         self.tipo=""
@@ -58,7 +59,7 @@ class Open:
         if self.tipo=="server":
             ruta = ""
             if self.name[0] in '/':
-                ruta = rutaSer + self.name
+                ruta = '.' + self.name
             else:
                 ruta = os.path.join(rutaSer, self.name)
             if os.path.exists(ruta) and '.txt' in self.name:
@@ -66,11 +67,11 @@ class Open:
             else:
                 return 'No existe el archivo, o es un folder'
         elif self.tipo=="bucket":
-            if "/" in self.name:
-                self.name = self.name.replace('/',  '', 1)
+            # if "/" in self.name:
+            #     self.name = self.name.replace('/',  '', 1)
             s3_client = boto3.client('s3')
             nombre_bucket = '202001574'
-            ruta_archivo_s3 = 'archivos/'+self.name
+            ruta_archivo_s3 = self.name
             response = s3_client.get_object(
                 Bucket=nombre_bucket, Key=ruta_archivo_s3)
             contenido = response['Body'].read().decode('utf-8')
@@ -78,8 +79,9 @@ class Open:
 
     def openRecive(self):
         # res={"name":"asdfsd.txt","contenido":"su makina"}
-        res = requests.get(
+        res = requests.post(
             url=f"http://{self.ip}:{self.port}/opena",  # URL METODO
             json={"type": self.tipo, "name": self.name}  # LO QUE ENVIO
         )
-        return [res["name"],res["contenido"]]
+        jsoN = json.loads(res.text)
+        return [jsoN["data"]["name"],jsoN["data"]["contenido"]]

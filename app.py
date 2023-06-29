@@ -120,7 +120,7 @@ def backUpN():
     backup = Backup()
     backup.Name(request.json['name'])
     if (request.json['ip'] != '') and (request.json['port'] != ''):  # sent
-        backup.Ip(request.json['ip'])
+        backup.Ip(request.json['ip'].replace('"', ''))
         backup.Port(request.json['port'])
         backup.typeTo(request.json['type_to'])
         backup.typeFrom(request.json['type_from'])
@@ -153,7 +153,7 @@ def recoveryN():
     recovery = Recovery()
     recovery.Name(request.json['name'])
     if (request.json['ip'] != '') and (request.json['port'] != ''):  # sent
-        recovery.Ip(request.json['ip'])
+        recovery.Ip(request.json['ip'].replace('"', ''))
         recovery.Port(request.json['port'])
         recovery.typeTo(request.json['type_to'])
         recovery.typeFrom(request.json['type_from'])
@@ -231,7 +231,7 @@ def openS():
     opeN.Name(request.json['name'])
     if (request.json['ip'] != '') and (request.json['port'] != ''):  # sent
         opeN.type(request.json['type'])
-        opeN.Ip(request.json['ip'])
+        opeN.Ip(request.json['ip'].replace('"', ''))
         opeN.Port(request.json['port'])
         array=opeN.openRecive()
         return {"open":f'nombre:{array[0]}, contenido:{array[1]}'}
