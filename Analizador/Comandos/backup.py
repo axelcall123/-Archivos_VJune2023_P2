@@ -91,7 +91,7 @@ class Backup:
                 json={"type_to": self.tipoA
                       , "type_from": self.tipoDe
                       , "name": self.name
-                      ,"archivos": "{"+resT+"}"}  # LO QUE ENVIO
+                      , "archivos": json.loads("{"+resT+"}")}  # LO QUE ENVIO
                  )
             return res.text
             # return resT
@@ -102,7 +102,7 @@ class Backup:
                 json={"type_to": self.tipoA
                       , "type_from": self.tipoDe
                       , "name": self.name
-                      ,"archivos": "{"+resT+"}"}  # LO QUE ENVIO
+                      , "archivos":  json.loads("{"+resT+"}")}  # LO QUE ENVIO
                 )
             return res.text
             # return resT
