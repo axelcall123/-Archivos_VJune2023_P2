@@ -1,9 +1,5 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    AIP
-
 Grammar
 
 Rule 0     S' -> inicio
@@ -32,7 +28,7 @@ Rule 22    sub -> FROM RUTA
 Rule 23    sub -> TO RUTA
 Rule 24    sub -> TYPE_TO tipo
 Rule 25    sub -> TYPE_FROM tipo
-Rule 26    sub -> IP STRING
+Rule 26    sub -> IP AIP
 Rule 27    sub -> PORT APORT
 Rule 28    tipo -> BUCKET
 Rule 29    tipo -> SERVER
@@ -42,7 +38,7 @@ Rule 32    nombre -> RUTA
 
 Terminals, with rules where they appear
 
-AIP                  : 
+AIP                  : 26
 APORT                : 27
 ARCHIVO              : 30
 BACKUP               : 12
@@ -63,7 +59,7 @@ RECOVERY             : 13
 RENAME               : 10
 RUTA                 : 21 22 23 32
 SERVER               : 29
-STRING               : 20 26 31
+STRING               : 20 31
 TO                   : 23
 TRANSFER             : 9
 TYPE                 : 18
@@ -188,7 +184,7 @@ state 4
     (23) sub -> . TO RUTA
     (24) sub -> . TYPE_TO tipo
     (25) sub -> . TYPE_FROM tipo
-    (26) sub -> . IP STRING
+    (26) sub -> . IP AIP
     (27) sub -> . PORT APORT
 
     CREATE          reduce using rule 5 (comandos -> maincomando .)
@@ -515,7 +511,7 @@ state 16
     (23) sub -> . TO RUTA
     (24) sub -> . TYPE_TO tipo
     (25) sub -> . TYPE_FROM tipo
-    (26) sub -> . IP STRING
+    (26) sub -> . IP AIP
     (27) sub -> . PORT APORT
 
     CREATE          reduce using rule 4 (comandos -> maincomando subcomando .)
@@ -645,9 +641,9 @@ state 25
 
 state 26
 
-    (26) sub -> IP . STRING
+    (26) sub -> IP . AIP
 
-    STRING          shift and go to state 42
+    AIP             shift and go to state 42
 
 
 state 27
@@ -1037,29 +1033,29 @@ state 41
 
 state 42
 
-    (26) sub -> IP STRING .
+    (26) sub -> IP AIP .
 
-    TYPE            reduce using rule 26 (sub -> IP STRING .)
-    NAME            reduce using rule 26 (sub -> IP STRING .)
-    BODY            reduce using rule 26 (sub -> IP STRING .)
-    PATH            reduce using rule 26 (sub -> IP STRING .)
-    FROM            reduce using rule 26 (sub -> IP STRING .)
-    TO              reduce using rule 26 (sub -> IP STRING .)
-    TYPE_TO         reduce using rule 26 (sub -> IP STRING .)
-    TYPE_FROM       reduce using rule 26 (sub -> IP STRING .)
-    IP              reduce using rule 26 (sub -> IP STRING .)
-    PORT            reduce using rule 26 (sub -> IP STRING .)
-    CREATE          reduce using rule 26 (sub -> IP STRING .)
-    DELETE          reduce using rule 26 (sub -> IP STRING .)
-    COPY            reduce using rule 26 (sub -> IP STRING .)
-    TRANSFER        reduce using rule 26 (sub -> IP STRING .)
-    RENAME          reduce using rule 26 (sub -> IP STRING .)
-    MODIFY          reduce using rule 26 (sub -> IP STRING .)
-    BACKUP          reduce using rule 26 (sub -> IP STRING .)
-    RECOVERY        reduce using rule 26 (sub -> IP STRING .)
-    DELETE_ALL      reduce using rule 26 (sub -> IP STRING .)
-    OPEN            reduce using rule 26 (sub -> IP STRING .)
-    $end            reduce using rule 26 (sub -> IP STRING .)
+    TYPE            reduce using rule 26 (sub -> IP AIP .)
+    NAME            reduce using rule 26 (sub -> IP AIP .)
+    BODY            reduce using rule 26 (sub -> IP AIP .)
+    PATH            reduce using rule 26 (sub -> IP AIP .)
+    FROM            reduce using rule 26 (sub -> IP AIP .)
+    TO              reduce using rule 26 (sub -> IP AIP .)
+    TYPE_TO         reduce using rule 26 (sub -> IP AIP .)
+    TYPE_FROM       reduce using rule 26 (sub -> IP AIP .)
+    IP              reduce using rule 26 (sub -> IP AIP .)
+    PORT            reduce using rule 26 (sub -> IP AIP .)
+    CREATE          reduce using rule 26 (sub -> IP AIP .)
+    DELETE          reduce using rule 26 (sub -> IP AIP .)
+    COPY            reduce using rule 26 (sub -> IP AIP .)
+    TRANSFER        reduce using rule 26 (sub -> IP AIP .)
+    RENAME          reduce using rule 26 (sub -> IP AIP .)
+    MODIFY          reduce using rule 26 (sub -> IP AIP .)
+    BACKUP          reduce using rule 26 (sub -> IP AIP .)
+    RECOVERY        reduce using rule 26 (sub -> IP AIP .)
+    DELETE_ALL      reduce using rule 26 (sub -> IP AIP .)
+    OPEN            reduce using rule 26 (sub -> IP AIP .)
+    $end            reduce using rule 26 (sub -> IP AIP .)
 
 
 state 43

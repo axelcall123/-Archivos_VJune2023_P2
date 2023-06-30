@@ -49,7 +49,7 @@ tokens = [
     'AIP',
     # 'WORD',
     'APORT',
-    'STRING'
+    'STRING',
 
 ]# + list(reserved.values())
 t_BACKUP = r'backup'
@@ -77,6 +77,18 @@ t_TYPE_FROM = r'-type_from->'
 t_IP = r'-ip->'
 t_PORT = r'-port->'
 
+
+def t_AIP(t):
+    r'\d{2,3}\.\d{2,3}(\.\d{1,3}){2}'
+    t.value = t.value.lower()
+    return t
+
+def t_APORT(t):
+    r'\d{1,4}'
+    t.value = t.value.lower()
+    return t
+
+
 def t_ARCHIVO(t):
     r'(\"(\w|\s)+\.\w+\")|(\w+\.\w+)'
     t.value = t.value.lower()
@@ -87,21 +99,13 @@ def t_RUTA(t):
     t.value = t.value.lower()
     return t
 
-# def t_AIP(t):
-#     r'\d{1,3}[\.\d{1,3}]{3}'
-#     t.value = t.value.lower()
-#     return t
-
 # def t_WORD(t):
 #     r'[a-zA-Z][a-zA-Z0-9_]*]'
 #     t.value = t.value.lower()
 #     return t
 
 
-def t_APORT(t):
-    r'\d{1,4}'
-    t.value = t.value.lower()
-    return t
+
 
 def t_STRING(t):
     #anterior  ^\"[^"]+\"$
@@ -192,7 +196,7 @@ def p_sub(p):
             | TO RUTA
             | TYPE_TO tipo
             | TYPE_FROM tipo
-            | IP STRING
+            | IP AIP
             | PORT APORT
     '''
     arr = []
